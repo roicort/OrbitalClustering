@@ -29,6 +29,8 @@ from sklearn.metrics.cluster import normalized_mutual_info_score
 
 from gap_statistic import OptimalK
 
+from itertools import count
+
 ##############################################################################################################################
 
 def AuditCentroids(centroids_path):
@@ -39,6 +41,10 @@ def AuditCentroids(centroids_path):
         print(aux)
 
 def ColorNetworks(read_path,users_path,save_path):
+
+    colors = [{"name":"Y In Mn Blue","hex":"355070","rgb":[53,80,112],"cmyk":[53,29,0,56],"hsb":[213,53,44],"hsl":[213,36,32],"lab":[33,0,-22]},{"name":"Chinese Violet","hex":"6d597a","rgb":[109,89,122],"cmyk":[11,27,0,52],"hsb":[276,27,48],"hsl":[276,16,41],"lab":[41,15,-16]},{"name":"Cinnamon Satin","hex":"b56576","rgb":[181,101,118],"cmyk":[0,44,35,29],"hsb":[347,44,71],"hsl":[347,35,55],"lab":[52,34,5]},{"name":"Candy Pink","hex":"e56b6f","rgb":[229,107,111],"cmyk":[0,53,52,10],"hsb":[358,53,90],"hsl":[358,70,66],"lab":[60,48,21]},{"name":"Tumbleweed","hex":"eaac8b","rgb":[234,172,139],"cmyk":[0,26,41,8],"hsb":[21,41,92],"hsl":[21,69,73],"lab":[75,19,26]}]
+
+    #https://coolors.co/355070-6d597a-b56576-e56b6f-eaac8b
 
     files = []
 
@@ -71,7 +77,7 @@ def ColorNetworks(read_path,users_path,save_path):
 
         #print(Net)
 
-        clusterdict = pd.Series(Net["Cluster"].values,index=Net["Value"]).to_dict()
+        clusterdict = pd.Series(Net["Cluster"].values+1,index=Net["Value"]).to_dict()
 
         #print(clusterdict)
 
@@ -81,6 +87,23 @@ def ColorNetworks(read_path,users_path,save_path):
         G=nx.from_pandas_edgelist(edges, "Source", "Target",create_using=nx.DiGraph())
         
         nx.set_node_attributes(G, clusterdict, name="Cluster")
+
+        colordict = {}
+
+        for n in G.nodes():
+            c = G.nodes[n]['Cluster'] 
+            color = colors[c-1]['rgb']
+            colordict[n] = {"color":{'r': color[0], 'g': color[1], 'b': color[2], 'a': 1}}
+            #G.nodes[n]['viz']['color'] = {'r': color[0], 'g': color[1], 'b': color[2]}
+
+        nx.set_node_attributes(G, colordict, name="viz")
+
+        #pos = nx.spring_layout(G)
+        #ec = nx.draw_networkx_edges(G, pos, alpha=0.2)
+        #nc = nx.draw_networkx_nodes(G, pos, nodelist=nodes, node_color=colors, cmap=plt.cm.jet)
+        #plt.colorbar(nc)
+        #plt.axis('off')
+        #plt.show()
 
         nx.write_gexf(G, save_path+name+".gexf") 
 

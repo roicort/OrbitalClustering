@@ -21,7 +21,7 @@ from correlations import GraphletCorrelations
 
 #PreCompute
 
-#if parallelrunnerGC('input/','logs/',threads=24):
+#if parallelrunnerGC('input/','logs/',threads=4):
 #    msg.good("Parallel precompute done")
 
 ########################################################################
@@ -57,6 +57,6 @@ from correlations import GraphletCorrelations
 
 #AuditCentroids("embeddings/5-CentroidsMiniBatchEmbedding.out")
 
-#ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
+ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
 
 

@@ -21,6 +21,7 @@ def parallelprecomputeGDGV(file):
     name = file[1]
     save_path = file[2]+name+".log"
     rungdgv = "{ time " +"src/./gdgv_exe " + path + " ; }" + " 2> " + save_path
+    msg.info(rungdgv)
     os.system(rungdgv)
     return rungdgv
 
@@ -41,7 +42,7 @@ def runnerGC(read_path,save_path):
 
     return True
 
-def parallelrunnerGC(read_path,save_path,threads=8):
+def parallelrunnerGC(read_path,save_path,threads=4):
 
     files = []
 
