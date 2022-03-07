@@ -66,15 +66,15 @@ def ColorNetworks(read_path,users_path,save_path):
         name = files[file][1]
 
         dt = pd.read_csv(path,header= None,sep = " ")
-        dt.columns =['Index','Values']
-        dictionary = pd.Series(dt["Values"].values,index=dt["Index"]).to_dict()
+        dt.columns =['Index','NodeID']
+        dictionary = pd.Series(dt["NodeID"].values,index=dt["Index"]).to_dict()
 
         #print(dt)
-        #print(dictionary)
+        print(dictionary)
 
         Net = X.loc[X['Network'] == name]
+        #print(Net)
         Net['Value']= Net['Key'].map(dictionary)
-
         #print(Net)
 
         clusterdict = pd.Series(Net["Cluster"].values+1,index=Net["Value"]).to_dict()
