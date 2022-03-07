@@ -70,7 +70,7 @@ def ColorNetworks(read_path,users_path,save_path):
         dictionary = pd.Series(dt["NodeID"].values,index=dt["Index"]).to_dict()
 
         #print(dt)
-        print(dictionary)
+        #print(dictionary)
 
         Net = X.loc[X['Network'] == name]
         #print(Net)
