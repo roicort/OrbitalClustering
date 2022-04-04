@@ -30,7 +30,7 @@ from sklearn.metrics.cluster import normalized_mutual_info_score
 from gap_statistic import OptimalK
 
 
-def OptKEmbedding(read_path, save_path, nrefs=5, maxClusters=15):
+def OptKEmbedding(read_path, save_path, nrefs=5, maxClusters=10):
 
     files = []
 
@@ -196,7 +196,7 @@ def OptKEmbedding(read_path, save_path, nrefs=5, maxClusters=15):
     #plt.clf()
     """
 
-    return True # Plus 1 because index of 0 means 1 cluster is optimal, index 2 = 3 clusters are optimal
+    return True 
 
 
 def GetMiniBatchKMeans(X,K):
@@ -275,8 +275,6 @@ def GetStabilityEmbedding(read_path,save_path,runs,K):
     
     msg.good("NMI Done")
 
-    name=str(np.random.randint(0,1000))
-
     msg.info("Plotting...")
 
     sns.set(font_scale=0.1)
@@ -286,17 +284,14 @@ def GetStabilityEmbedding(read_path,save_path,runs,K):
 
     fig = go.Figure([go.Bar(x=list(range(len(inertias))), y=inertias)])
 
-    fig.write_html(save_path+str(K)+"Embedding-inertias.html")
+    fig.write_image(save_path+str(K)+"Embedding-inertias.svg")
     np.savetxt(save_path+str(K)+'Embedding-intertias.out', np.array(inertias), delimiter=',')
 
     msg.good("Plotting Done")
 
-    nmim = [np.mean(NMIs)]
-    print(nmim)
+    nmim = [np.mean(NMIs)*2]
 
     np.savetxt(save_path+str(K)+'Embedding-NMIsMean.out', np.array(nmim), delimiter=',')
-
-    #print(NMIs)
 
     return True
 
@@ -341,12 +336,12 @@ def UsersMiniBatchKMeansEmbedding(read_path,save_path, K,seed=None):
     X["Cluster"] = clusters
     X["Network"] = aux
 
-    print(X)
+    #print(X)
 
     XS = X[["Network","Cluster"]]
     G = XS.pivot_table(index='Network', columns='Cluster', aggfunc=len,fill_value=0)
 
-    G.to_csv(save_path+str(K)+'-MiniBatchUsersEmbedding.csv')
+    #G.to_csv(save_path+str(K)+'-MiniBatchUsersEmbedding.csv')
 
     msg.good("Clustering Done")
 

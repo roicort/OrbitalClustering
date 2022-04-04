@@ -7,8 +7,7 @@ from runner import parallelrunnerGC
 from embedding import OptKEmbedding, GetStabilityEmbedding, UsersMiniBatchKMeansEmbedding
 from clustering import OptKClustering, GetStabilityClustering, UsersDendrogramClustering 
 
-from utils import ColorNetworks, AuditCentroids
-from correlations import GraphletCorrelations
+from utils import ColorNetworks, AuditCentroids, GraphletCorrelations
 
 ########################################################################
 
@@ -39,24 +38,21 @@ from correlations import GraphletCorrelations
 
 ## Second Clustering (Graph Clustering)
 
-#if OptKClustering("embeddings/5-MiniBatchUsersEmbedding.csv","stability/"):
+#if OptKClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","clustering/"):
 #    msg.good("GAP Graphs Done")
 
-#if GetStabilityClustering("embeddings/5-MiniBatchUsersEmbedding.csv","stability/",runs=50,K=3):
+#if GetStabilityClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","clustering/",runs=50,K=3):
 #    msg.good("NetworkClustering Stability Done")
 
-#if UsersDendrogramClustering("embeddings/5-MiniBatchUsersEmbedding.csv","dendrograms/"):
-#    msg.good("Dendrogram Done")
-
-#if UsersDendrogramClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","dendrograms/", name = "Norm"):
+#if UsersDendrogramClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","clustering/", name = "Norm"):
 #    msg.good("Dendrogram Norm Done")
 
 ########################################################################
 
-#GraphletCorrelations("input/","correlations/")
+#GraphletCorrelations("input/","./")
 
 #AuditCentroids("embeddings/5-CentroidsMiniBatchEmbedding.out")
 
-ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
+#ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
 
 

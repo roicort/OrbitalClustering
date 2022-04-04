@@ -48,7 +48,7 @@ def OptKClustering(embedding_path, save_path, nrefs=5, maxClusters=12):
     model = KMeans()
     visualizer = KElbowVisualizer(model, k=(2,maxClusters),metric='distortion',timings = True)
     visualizer.fit(X)        
-    visualizer.show()        
+    #visualizer.show()        
     plt.savefig(save_path+"Cluster-Distortion-Kusers"+".svg")
     msg.good("Elbow Done")
     plt.clf()
@@ -57,7 +57,7 @@ def OptKClustering(embedding_path, save_path, nrefs=5, maxClusters=12):
     model = KMeans()
     visualizer = KElbowVisualizer(model, k=(2,maxClusters),metric='silhouette', timings = True)
     visualizer.fit(X)
-    visualizer.show()  
+    #visualizer.show()  
     plt.savefig(save_path+"Cluster-Silhouette-Kusers"+".svg")
     msg.good("Silhouette Done")
     plt.clf()
@@ -66,7 +66,7 @@ def OptKClustering(embedding_path, save_path, nrefs=5, maxClusters=12):
     model = KMeans()
     visualizer = KElbowVisualizer(model, k=(2,maxClusters),metric='calinski_harabasz', timings = True)
     visualizer.fit(X)
-    visualizer.show()  
+    #visualizer.show()  
     plt.savefig(save_path+"Cluster-CalinskiHarabasz-Kusers"+".svg")
     msg.good("CalinskiHarabasz Done")
     plt.clf()
@@ -250,12 +250,16 @@ def GetStabilityClustering(embedding_path,save_path,runs,K):
 
     fig = go.Figure([go.Bar(x=list(range(len(inertias))), y=inertias)])
 
-    fig.write_html(save_path+str(K)+"Clustering-inertias.html")
+    fig.write_image(save_path+str(K)+"Clustering-inertias.html")
     np.savetxt(save_path+str(K)+'Clustering-intertias.out', np.array(inertias), delimiter=',')
 
     msg.good("Plotting Done")
 
     #print(NMIs)
+
+    nmim = [np.mean(NMIs)*2]
+
+    np.savetxt(save_path+str(K)+'Clustering-NMIsMean.out', np.array(nmim), delimiter=',')
 
     return True
 
@@ -270,11 +274,11 @@ def UsersDendrogramClustering(embedding_path,save_path,name=""):
 
     msg.info("Computing Distances")
 
-    SD = ssd.squareform(ssd.pdist(X,metric='cosine'))
+    SD = ssd.squareform(ssd.pdist(X,metric='euclidean'))
 
     sns.set(font_scale=0.1)
     sns.heatmap(SD, annot=True)
-    plt.savefig(save_path+name+"DendrogramDistances-UsersClustering.svg")
+    plt.savefig(save_path+name+"EmbeddingDistances.svg")
     plt.clf()
 
     msg.good("Distances Done")
@@ -282,10 +286,10 @@ def UsersDendrogramClustering(embedding_path,save_path,name=""):
     msg.info("Computing Dendrograms")
 
     for method in ['single','complete','average','weighted','centroid','median','ward']:
-        fig = ff.create_dendrogram(X, orientation='left', labels=labels, distfun=lambda alpha: ssd.pdist(alpha,metric='cosine'),linkagefun=lambda alpha: h.linkage(alpha,method=method,optimal_ordering=True))
+        fig = ff.create_dendrogram(X, orientation='left', labels=labels, distfun=lambda alpha: ssd.pdist(alpha,metric='euclidean'),linkagefun=lambda alpha: h.linkage(alpha,method=method,optimal_ordering=True))
         fig.layout.width = 1256
         fig.layout.height = 1256
-        fig.write_image(save_path+name+"UsersClustering-Dendrogram-"+method+".svg")
+        fig.write_image(save_path+name+"Dendrogram-"+method+".svg")
 
     msg.good("Dengrograms Done")
 

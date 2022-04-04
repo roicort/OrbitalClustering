@@ -108,3 +108,33 @@ def ColorNetworks(read_path,users_path,save_path):
         nx.write_gexf(G, save_path+name+".gexf") 
 
     msg.good("Done")
+
+def GraphletCorrelations(read_path,save_path):
+
+    files = []
+
+    for r, _, f in os.walk(read_path):
+        for file in f:
+            if '.edges.graphletcounts.txt' in file:
+                files.append([os.path.join(r, file),file.replace(".edges.graphletcounts.txt","")])
+    files.sort()
+
+    complete = pd.DataFrame()
+    for file in tqdm(range(len(files))):
+        path = files[file][0]
+        name = files[file][1]
+        df = pd.read_csv(path,sep=" ",names=["Graphlet",name])
+        df = pd.pivot_table(df,columns="Graphlet")
+        #print(df)
+        complete = pd.concat([complete, df])
+        #os.system("clear")
+        #msg.info(rungdgv)
+
+    for column in complete.columns:
+        complete[column] = skp.MinMaxScaler().fit_transform(complete[column].values.reshape(-1, 1))
+
+    corr_matrix = complete.corr()
+    
+    sns.set(font_scale=0.1)
+    sns.heatmap(corr_matrix, annot=True)
+    plt.savefig(save_path+"Graphlet-Corr.svg")
