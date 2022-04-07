@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunksoccisaurus=self.webpackChunksoccisaurus||[]).push([[535],{5641:function(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Sobre el proyecto","permalink":"/blog/welcome"}]}')}}]);

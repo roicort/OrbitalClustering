@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
   title: 'Orbital Clustering',
   tagline: "Clustering twitter networks by their users' structural profile.",
   url: 'https://socci.xyz',
-  baseUrl: '/',
+  baseUrl: '/OrbitalClustering/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
