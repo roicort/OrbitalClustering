@@ -28,10 +28,10 @@ from utils import ColorNetworks, AuditCentroids, GraphletCorrelations
 ## First Clustering (Users Caracterization)
 
 #if OptKEmbedding("input/","stability/"):
-#    msg.good("GAP Users Done")
+    #msg.good("GAP Users Done")
 
-#if GetStabilityEmbedding("input/","stability/",runs=50,K=5):
-#    msg.good("Embedding Stability Done")
+if GetStabilityEmbedding("input/","stability/",runs=50,K=5):
+    msg.good("Embedding Stability Done")
 
 #if UsersMiniBatchKMeansEmbedding("input/","embeddings/",K=5):
 #    msg.good("KMeans Embedding Done!")

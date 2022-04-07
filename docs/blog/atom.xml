@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://socci.xyz/blog</id>
+    <title>Orbital Clustering Blog</title>
+    <updated>2021-08-26T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://socci.xyz/blog"/>
+    <subtitle>Orbital Clustering Blog</subtitle>
+    <icon>https://socci.xyz/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Sobre el proyecto]]></title>
+        <id>welcome</id>
+        <link href="https://socci.xyz/blog/welcome"/>
+        <updated>2021-08-26T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Esta tesis doctoral bla bla bla bla bla bla bla bla bla]]></summary>
+        <content type="html"><![CDATA[<p>Esta tesis doctoral bla bla bla bla bla bla bla bla bla</p>]]></content>
+        <author>
+            <name>Sandra Socci</name>
+            <uri>https://github.com/sandra-socci</uri>
+        </author>
+        <author>
+            <name>Rodrigo Cortez</name>
+            <uri>https://github.com/roicort</uri>
+        </author>
+        <category label="about" term="about"/>
+        <category label="hello" term="hello"/>
+        <category label="docusaurus" term="docusaurus"/>
+    </entry>
+</feed>
