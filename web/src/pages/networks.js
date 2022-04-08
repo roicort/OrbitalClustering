@@ -65,7 +65,7 @@ export default function Home({...props}) {
   const {siteConfig} = useDocusaurusContext();
 
   let dset = {
-    labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5'],
+    labels: ['C1', 'C2', 'C3', 'C4', 'C5'],
     datasets: [],
   };
 
@@ -105,7 +105,7 @@ export default function Home({...props}) {
 
       data.datasets = dset;
       setData(data);
-      setText(nd.label);
+      setText("Red: "+nd.label);
     }
   }
 
@@ -114,13 +114,17 @@ export default function Home({...props}) {
   return (
   <Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
 
-    <Graph className={clsx(styles.graphCanvas)}
+    <div className={clsx(styles.graphCanvas)}> 
+
+    <Graph
       graph={graph}
       options={options}
       events={events}
     />
 
-    <h3 className={clsx(styles.textcenter)}>Label = {text}</h3>
+    </div>
+
+    <h3 className={clsx(styles.Title)}>{text}</h3>
 
     <div className={clsx(styles.radarCanvas)}> 
 

@@ -47,15 +47,6 @@ h3{
   padding-bottom: 3rem;
 }
 
-.graphCanvas {
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100vh;
-  border: 1px;
-}
-
 .radarCanvas {
   display: block;
   margin: 2em auto;
@@ -68,7 +59,20 @@ h3{
   }
 }
 
-.textcenter {
+.interaction {
   text-align: center;
-  padding: 1em;
+  padding-top: 2.5em;
+}
+
+.textcontainer {
+  width: 100%;
+  padding-left: 25%;
+  padding-right: 25%;
+  text-align: center;
+}
+
+.Title{
+  text-align: center;
+  padding-top: 4em;
+  padding-bottom: 1em;
 }

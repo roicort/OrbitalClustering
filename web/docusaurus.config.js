@@ -42,7 +42,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'OrbitalClustering',
+        title: 'Orbital Clustering',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
@@ -55,8 +55,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
             label: 'Tesis',
           },
           //{to: '/blog', label: 'Blog', position: 'right'},
-          {to: '/networks', label: 'Networks', position: 'right'},
-          {to: '/explore', label: 'Explore', position: 'right'},
+          {to: '/networks', label: 'Redes', position: 'right'},
+          {to: '/explore', label: 'Explorar', position: 'right'},
           {
             to: 'https://github.com/facebook/docusaurus',
             label: 'GitHub',
