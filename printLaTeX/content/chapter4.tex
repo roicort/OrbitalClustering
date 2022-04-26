@@ -1,0 +1,216 @@
+% !TEX root = ../my-thesis.tex
+%
+\chapter{Método propuesto}
+\label{sec:proposal}
+
+%\cleanchapterquote{Innovation distinguishes between a leader and a follower.}{Steve Jobs}{(CEO Apple Inc.)}
+
+El agrupamiento de una colección de grafos no es un problema sencillo. El uso de algoritmos de agrupación populares, como K-Means, requiere representar los grafos en un espacio vectorial. Esta tarea puede llevarse a cabo mediante métodos que van desde la extracción de características - por ejemplo graphlets - hasta \textit{embeddings} más sofisticados generados a través de redes neuronales. 
+
+Priorizando la interpretación de los resultados, proponemos usar el conteo de órbitas en graphlets dirigidos para hacer una caracterización de los usuarios en la colección analizada y crear un \textit{embedding} de las redes que brinde información sobre el tipo de comportamiento que genera un determinado tema. 
+
+En este capítulo se presenta un método para agrupar redes a través de la firma orbital de sus nodos y que, así, toma en cuenta los roles estructurales de los usuarios. El método tiene dos etapa principales. Primero construye perfiles de usuarios utilizando la firma de la órbita asignada a cada nodo en un análisis de la red basado en graphlets. Después, agrupa las redes con base en la distribución de perfiles que presentan. 
+
+\section{Graphlets y órbitas dirigidas}
+
+A partir de los conteos de órbitas vistos en el capítulo anterior, Sarajilic \textit{et al.} han propuesto extender las órbitas a grafos dirigidos \cite{sarajlic_graphlet-based_2016}. Dada la extensión de las posibles configuraciones para las órbitas en un graphlet dirigido se limita el conteo a graphlets de hasta 4 nodos. En este caso la firma orbital resultante es un vector en $R^{129}$ donde el componente $i$ representa el conteo de la órbita $i$ que son descritos en la Fig. \ref{fig:orbits}.
+
+ \begin{figure}[htbp]
+   \centering
+   \includesvg[width=0.9\textwidth]{figures/orbits.svg}
+    \caption{Orbitas de hasta 4 nodos, donde $G_i$ representa el graphlet correspondiente y $i$ la órbita dentro del graphlet.}
+    \label{fig:orbits}
+\end{figure}
+
+
+\section{Perfilar usuarios}
+\label{sec:proposal:users}
+
+ La creación de perfiles de usuario (\textit{user profiling}) ha tenido numerosas aplicaciones dentro y fuera de las ciencias computacionales. Cuando revisamos la literatura científica al respecto encontramos metodologías que permiten encontrar perfiles de usuario a partir de minería de datos en redes sociales que representan ciertos perfiles psicológicos con sus conductas asociadas y han permitido entre otras cosas campañas de marketing dirigidas \cite{hu_cambridge_2020}. No obstante dichos métodos para crear perfiles o grupos de usuarios se basan en los metadatos de las interacciones entre usuarios.
+ 
+Como podemos observar en \ref{section:nodeclustering} también es posible realizar agrupamientos estructurales basados en la topología de los nodos que componen la red. Este tipo de agrupamiento nos permite agrupar los distintos comportamientos de los usuarios a partir de sus propiedades estructurales y por lo tanto crear perfiles de usuarios con funciones topológicas y comportamientos similares.
+ 
+En las redes sociales, específicamente en Twitter, las funciones y las interacciones que realiza un nodo dentro de una red inciden directamente en la composición y topología de la misma. Estudiar los roles estructurales especialmente útil a la hora de caracterizar un nodo dada su función topológica dentro de la red. Los roles analizados nos dan información sobre los tipos de comportamiento del usuarios y nos permiten estudiar la composición de la red.
+
+De hecho, diferentes trabajos en ciencias sociales se centran en los patrones de los lazos de la red para entender los procesos dentro de un sistema, por ejemplo, Lusher y Robins sugieren la presencia de configuraciones a lo largo de las líneas de "huellas arqueológicas" impresas en los mecanismos sociales a través del tiempo y ejemplifican su idea sugiriendo los arreglos mostrados en \ref{fig:lusher}.
+
+\begin{figure}[htbp]
+  \centering
+  \includesvg[width=1.\textwidth]{figures/LusherUnderstanding.svg}
+    \caption{Algunos patrones propuestos por Lusher y Robins para describir configuraciones sociales dentro de procesos colectivos \citep{lusher_exponential_nodate}. Las aristas dirigidas permiten la distinción entre jerarquías y posiciones de poder dentro de la red.}
+    \label{fig:lusher}
+\end{figure}
+
+Una propuesta importante de este trabajo es que la firma orbital que puede obtenerse para un nodo, también considerarse una extensión del trabajo propuesto por Lusher y Robins. Es decir, se cosidera que las estructuras que van más allá de las triadas de usuarios, pueden capturar información sobre las dinámicas entre usuarios, sobre la jerarquía que se establece entre ellos y sobre la estructura general de la red. 
+
+En este caso, por tratarse de una red con aristas dirigidas, es necesario considerar las órbitas que aparecen en graphlets de orden 2-4 para el caso dirigido. Dichas órbitas fueron propuestas como una generalización del caso no dirigido visto en \ref{chapter:graphlets}. Las órbitas dirigidas se muestran en la Fig. \ref{fig:orbits}. 
+
+Así, consideramos que en el caso de Twitter es posible identificar perfiles de usuarios similares dentro de las redes temáticas. Debido a la capacidad de las orbitas de capturar información sobre las posiciones y roles estructurales de un nodo dentro de una red, proponemos agrupar los nodos (usuarios) de la red temática utilizando la firma orbital como un \textit{embedding} para crear perfiles de usuarios.
+
+Recordemos que al realizar el conteo de órbitas dirigidas para cada nodo se obtiene una matriz $M$ de tamaño $n_{users}\times 129$, en donde cada fila representa un nodo en la red. Para identificar los distintos perfiles a partir de la matriz de conteos es necesario agruparlos. Para realizar el agrupamiento ahora es posible utilizar un algoritmo como K-Means visto en \ref{algorithms:k-means}.
+
+%[PÁRRAFO QUE TERMINA HABLANDO SOBRE EL VOLUMEN QUE SE ESPERA, Y POR QUÉ SERÍA NECESARIO UTILIZAR UNA VARIANTE MÁS EFICIENTE DE K-MEANS (MOTIVAR LA SIGUIENTE SUBSECCIÓN)]
+
+K-Means es un algoritmo conveniente por distintos motivos, entre ellos la interpretabilidad y eficiencia, no obstante debido al gran volumen de datos que involucra la representación vectorial para todos los usuarios de todas las redes en la colección, existen algunas limitaciones de ejecución y memoria que se han resuelto en modificaciones del algoritmo principal. Estas limitaciones han sido resueltas por distintas modificaciones propuestas al algoritmo original, una de las mas interesantes el MiniBatch K-Means que se revisa a continuación.
+
+\subsection{Análisis de los perfiles identificados}
+
+Para caracterizar el rol de los usuarios, proponemos consideraremos las propiedades topológicas de las órbitas dominantes de los grupos y el papel que desempeñan en el graphlet al que pertenecen. Además, también revisaremos las órbitas ausentes en los grupos, es decir, las órbitas ausentes en todos los usuarios del grupo.
+
+Algunas definiciones serán útiles para interpretar el rol que desempeñan las órbitas en un graphlet específico. Es conveniente recordar que cada arista dirigida indica una relación entre dos nodos, donde el nodo inicial representa a un usuario que ha mencionado, respondido o retuiteado al usuario representado por el nodo final. 
+
+\begin{itemize}
+    \item Grado de entrada: Para un nodo de un graphlet, el número de arcos dirigidos que comienzan en él se denomina grado de entrada (\textit{indegree}) de $n$.se denota como $deg-(n)$
+    \item Grado de salida: El número de arcos dirigidos que terminan en el nodo de un graphlet es su grado de salida (\textit{outdegree}). Se denota como $deg+(n)$.
+    \item Camino dirigido en un graphlet: Una secuencia finita de aristas que una secuencia de distintos nodos de tal manera que todas las aristas tenga la misma dirección. Es fácil observar que cada camino maximal en un graphlet comienza en una fuente y termina en un pozo. %Entender bien bien!
+\end{itemize}
+
+Un nodo $n$ tal que $deg-(n)=0$ es llamado una fuente. Un nodo $n$ tal que $deg+(n)=0$ es llamado a pozo. 
+
+Dado que el grado de entrada y el grado de salida de un nodo son invariantes bajo un automorfismo, podemos extender las definiciones de fuente y de pozo de los nodos a las órbitas. 
+
+Podemos decir que la fuente de una órbita $\mathcal{O}$ es un oyente (\emph{listener}) si para cada nodo $n\in\mathcal{O}$, la longitud de cada camino maximal que contiene un nodo comenzando en $n$ es igual a 1. Las órbitas 0, 6, 7, 21, 23, y 29 son ejemplos de órbitas de oyentes, pero las órbitas 11 y 17 no lo son. 
+
+De manera similar podemos decir que una órbita pozo $\mathcal{O}$ es un hablante (\emph{speaker}) si para cada nodo  $n\in\mathcal{O}$, $n$ es un pozo con $deg+(n)>1$. Finalmente podemos decir que una órbita $\mathcal{O}$ es una audiencia (\emph{audience}) si para cada nodo $n\in\mathcal{O}$, $n$ es un oyente y cada otro nodo en una arista que comienza en $n$ es un hablante. Las órbitas 7, 21 y 29 son ejemplos de órbitas de audiencia, pero la órbita 23 no lo es. 
+
+Cada nodo en $n$ participa en diferentes graphlets dentro de un red; cada graphlet nos da información sobre su vecindario local de 2, 3, o 4 nodos en los que $n$ participa. Adicionalmente, la información proporcionada por distintos graphlets es diferente a aquella dada únicamente por el indegree o el outdegree. Por ejemplo, es posible distinguir las órbitas 0 y 29 reconociendo que pueden frecuentemente participar en distintos toles dentro de la estructura general de la red, que en en el caso nos permite distinguir entre los perfiles 1 y 2.
+
+\subsection{MiniBatch K-Means}
+
+A pesar de la enorme popularidad de K-Means por su simplicidad y buen desempeño, gracias a la cada vez más grande cantidad de datos a analizar ha ido perdiendo su atractivo por algunas restricciónes como tener que mantener todo el conjunto de datos en memoria. 
+
+MiniBatch K-Means \cite{sculley_web-scale_2010} es una versión modificada de K-Means (ver \ref{algorithms:k-means}) que tiene como objetivo resolver muchas de las deficiencias de K-Means antes grandes y complejos problemas. Este algoritmo busca reducir la complejidad computacional utilizando únicamente una fracción del conjunto de datos cada iteración. Esta estrategia reduce el número de cálculos de distancias por iteración y por lo tanto la complejidad total, pero con un costo asociado de un agrupamiento de menor calidad. \cite{bejar_k-means_nodate}
+
+MiniBatch K-Means presenta un enfoque en el que se pretende resolver este problema, la idea principal es utilizar pequeños lotes (mini batches) aleatorios del conjunto de datos de un tamaño fijo para poder almacenarlos en la memoria. En cada iteración se obtiene una nueva muestra aleatoria del conjunto de datos y se utiliza para actualizar los grupos (clusters) hasta la convergencia. 
+
+MiniBatch k-Means hace uso de una tasa de aprendizaje que disminuye con el número de iteraciones. La tasa de aprendizaje es inversa del número de ejemplos asignados a un grupo durante el proceso y por lo tanto a medida que aumenta el número de iteraciones se reduce el efecto de nuevos ejemplos. La convergencia del algoritmo se puede detectar cuando no se producen más cambios en los grupos durante un número definido de iteraciones continuas
+
+%[HACER REFERENCIA AL PSEUDOCódigo]
+
+En \ref{algorithms:minik-means} podemos observar el pseudocódigo de MiniBatch K-Means y sus particularidades, entre ellas el muestreo $M$ de ejemplos aleatorios y el cálculo de la función objetivo (Distorsión).
+
+\lstinputlisting[language=Python, caption={Pseudocódigo $MiniBatch K-Means$ \cite{bejar_k-means_nodate}}\label{algorithms:minik-means}]{codes/minikmeans.pseudo} 
+
+No obstante, uno de las principales retos a los que hay que enfrentarse ante la utilización de este algoritmo es que se añade aún más susceptibilidad a las condiciones iniciales de K-Means. Al utilizar un muestreo aleatorio del conjunto de datos, los resultados pueden variar respecto a la implementación original. Esto quiere decir que además del algoritmo debería implementarse alguna medida de similitud entre las particiones resultantes de distintas corridas con distintas inicializaciones. 
+
+% Sección de estabilidad se va al capítulo de experimentos
+\subsection{Estabilidad de los perfiles identificados}
+
+A la similitud entre las distintas particiones la llamaremos la estabilidad de la solución. Esto quiere decir que mientras menos susceptible es un agrupamiento a las condiciones iniciales, más estable es la solución. En otras palabras, mientras más parecidos son los agrupamientos resultantes de distintas corridas con distintas inicializaciones más estable es el agrupamiento.
+
+Para comprobar la estabilidad de la solución encontrada con el algoritmo anteriormente mencionado se pude utilizar la Información Mutua Normalizada (NMI).
+
+La información mutua de dos variables aleatorias es una cantidad que mide la dependencia estadística entre ambas variables. Es decir, mide la información o reducción de la incertidumbre (entropía) de una variable aleatoria, X debido al conocimiento del valor de otra variable aleatoria Y.
+
+Consideremos dos variables aleatorias $X$ e $Y$ con posibles valores $x_i$, $i=1,2,...,n$, $y_j$, $j=1,2,...,m$ respectivamente. Dónde $ 
+{\displaystyle P(X=x_{i}|Y=y_{i})=P(x_{i}|y_{j})}$ y ${\displaystyle P(X=x_{i})=P(x_{i})}$
+
+De manera formal la Información Mutua está definida como
+
+$$ {\displaystyle I(x_{i};y_{j})=\log {\frac {P(x_{i}|y_{j})}{P(x_{i})}}} $$
+
+%[LA NMI PUEDE INTERPRETARSE COMO ... EXPLICAR QUÉ QUIERE DECIR EN EL CONTEXTO, ENTRE QUÉ VALORES ESTÁ,...]
+
+La Información Mutua se puede obtener a partir de la entropía que esta definida como
+
+$${\displaystyle H(X)=-\sum _{i}p(x_{i})\log _{2}p(x_{i})}$$
+
+$${\displaystyle H(X,Y)=-\sum _{x,y}p(x,y)\log _{2}p(x,y)}$$
+
+$${\displaystyle H(X|Y)=-\sum _{y}p(y)\sum _{x}p(x|y)\log _{2}p(x|y)}$$
+
+Para obtener la estabilidad de la solución, corremos el algoritmos de agrupamiento $R$ veces y obtenemos el promedio de los valores NMI para cada par de corridas del modelo. Es decir obtenemos una matriz de tamaño $R x R$ donde $C_1,\ldots,C_r$, representan cada $Corrida_r$.
+
+Formalmente, 
+
+\begin{center}\label{eq:PNMI}
+$Stability(C1,\ldots,C_r) = \frac{1}{r(r-1)}\sum_{i,j,i\not=j}^{r}NMI(C_i,C_j)$ \\
+$Stability(C1,\ldots,C_r) = \frac{1}{r(r-1)}\sum_{i,j,i\not=j}^{r} \frac{\mathbb{I}(C_i,C_j)}{\sqrt{\mathbb{H}(C_i)\mathbb{H}(C_j)}}$
+\end{center}
+
+donde $\mathbb{I}(C_i,C_j)$ es la NMI entre corridas $i,j$ y $\mathbb{H}(C_i)$ denota la entropía de la $i$th asignación.
+
+Tomar en cuenta lo robusto del agrupamiento para diferentes valores iniciales de los centros en el algoritmo de agrupamiento puede ser un medio para estimar la confianza en los perfiles identificados para usuarios considerados en la colección. Esto es importante porque dichos perfiles representan la base de la siguiente fase. 
+
+\section{Agrupar Redes}
+\label{sec:system:sec3}
+
+El propósito de este trabajo es crear grupos en una colección de redes, basados en características fácilmente interpretables y guiadas por los datos. 
+
+La segunda parte de nuestra metodología se centra a agrupar las redes temáticas de la colección. Para ello, utilizamos una representación vectorial basada en los perfiles identificados en la primera parte. De este modo, una vez que los perfiles de usuario se han establecido, creamos un segundo \textit{embedding} a partir de la frecuencia de aparición de cada tipo de usuario en cada una de las redes. 
+ 
+Nuestra hipótesis es que la frecuencia de aparición de cada perfil de usuario en la red podría variar en función del interés sucitado en un tema y la naturaleza de la discusión pública (colectiva) en Twitter. Así, cada red es entonces representada por un vector $v$ en ${R}^k$ donde $k$ es el número de perfiles encontrados en el paso anterior y el componente $v_i$ es el conteo de usuarios con el perfil $i$. Al representar cada red de acuerdo a la distribución de frecuencia de los tipos de usuario identificados en la fase 1, estamos sugiriendo que un criterio que permite diferenciar las redes en la colección es la dinámica que generan. 
+
+%[Consideramos que diferente redes provocan comporamientos - en el fondo, la idea detrás de nuestra propuesta es que las redes son separabales de acuerdo al comportamiento que generan. Hay que desarrollar esta idea con ejemplos.]
+% Quizá comparar las estructuras que se hallaron en el caso de KarateClub (en donde hay dos figuras claramente con un rango mayor) y el caso de una red de amigos que sea más horizontal.
+
+\paragraph{Clustering Jerárquico}
+
+%[ARGUMENTAR POR QUÉ CLUSTERING JERÁRQUICO - LA EXPLICACIÓN  PODRÍA CENTRARSE EN QUE NO REQUIERE SELECCIONAR UNA K PORQUE PRESENTA UN PANORAMA GENERAL DE LA SIMILITUD ENTRE INSTANCIAS. GOOGLEAR VENTAJAS DE ESTE TIPO DE AGRUPAMIENTO.]
+
+Dada las características del segundo agrupamiento, un algoritmo interesante que nos permite auditar el agrupamiento y para el cual no es necesario calcular una $K$ cantidad de grupos es el algoritmo de Clustering jerárquico. Este método permite analizar la jerarquía, en términos de distancia, de los grupos posibles dentro del conjunto de datos considerado. De manera general la jerarquía se determina de manera avara y comúnmente se presenta en un dendrograma. El clustering jerárquico depende de una medida de distancia entre las instancias del conjunto y un criterio de distancia para subconjuntos de datos. 
+
+\begin{figure}[htbp]
+  \centering
+  \includesvg[width=0.5\textwidth]{figures/hierarchy.svg}
+    \caption{Clustering Jerárquico}
+    \label{fig:hierarchy}
+\end{figure}
+
+%Dados los vectores que representan cada red (embeddings) se calcula la matriz de distancias utilizando la distancia Coseno. La distancia Coseno mide la similitud entre dos vectores en un espacio con producto interior y se mide por el coseno del ángulo entre los dos vectores. Esta distancia se utiliza principalmente cuando la magnitud de los vectores es irrelevante. 
+
+%La distancia coseno es ampliamente utilizada para medir la similitud entre documentos en procesamiento natural del lenguaje \citep{han_data_2012}. En esta tarea un documento se representa como un vector de \textit{término-frecuencia}, este vector se compone por la frecuencia de cada palabra que aparece en el documento y tiene dimensión del conjunto de palabras del documento. Estos vectores son inherentemente \textit{sparse} por lo que las distancias tradicionales no tienen el mejor desempeño \citep{han_data_2012}, es decir pueden existir dos vectores que tengan muchos ceros en común, pero eso no significa que son similares.
+
+%$${\displaystyle {\text{cosine similarity}}=S_{C}(A,B):=\cos(\theta )={\mathbf {A} \cdot \mathbf {B}  \over \|\mathbf {A} \|\|\mathbf {B} \|}={\frac {\sum \limits _{i=1}^{n}{A_{i}B_{i}}}{{\sqrt {\sum \limits _{i=1}^{n}{A_{i}^{2}}}}{\sqrt {\sum \limits _{i=1}^{n}{B_{i}^{2}}}}}},}$$
+
+%Para facilitar el uso de la distancia coseno utilizamos 
+
+%$$ 1 - {\mathbf {A} \cdot \mathbf {B} \over {\|\mathbf {A}\|}_2{\|\mathbf {B}\|}_2}$$
+
+%dónde ${\displaystyle \|{\boldsymbol {x}}\|_{2}$ es la norma euclideana.
+
+Para calcular la matriz de distancias utilizamos la norma L2, definida formalmente como:
+
+$${\displaystyle \|{\boldsymbol {x}}\|_{2}:={\sqrt {x_{1}^{2}+\cdots +x_{n}^{2}}}.}$$
+
+Una vez calculada la matriz de distancias se forman los grupos de manera jerárquica de acuerdo a distintos criterios para calcular la distancia $d(s,t)$ entre dos clusters $s$ y $t$. El algoritmo comienza con un conjunto de clusters que se irán añadiendo a la jerarquía. Cada paso los clusters s y t se uniran para formar un nuevo cluster u, una vez unidos s y t se remueven de conjunto inicial de clusters. El algoritmo termina cuando solo queda un único cluster al que llamamos raíz.
+
+\begin{center}
+    \begin{tabular}{ |p{2cm}|p{11cm}| }
+    \hline
+    \multicolumn{2}{|c|}{Métodos linkage} \\
+    \hline
+    Nombre & Función \\
+    \hline
+        single & $$d(u,v) =  \min(dist(u[i],v[j]))$$ \\
+    \hline
+        complete & $$d(u, v) = \max(dist(u[i],v[j]))$$  \\
+    \hline
+        average  & $$d(u,v) = \sum_{ij} \frac{d(u[i], v[j])}{(|u|*|v|)}$$ \\
+    \hline
+        weighted & $$d(u,v) = \frac{dist(s,v) + dist(t,v) }{2}$$ \\
+    \hline
+        centroid & $${d(u,v) = \|c_s - c_t\|}_2$$ \\
+    \hline
+        Ward     & $$d(u,v) = \sqrt{\frac{|v|+|s|}{T}d(v,s)^2+\frac{|v|+|t|}{T}d(v,t)^2- \frac{|v|}{T}d(s,t)^2}$$ dónde $T=|v|+|s|+|t|$ \\
+    \hline
+    \end{tabular}
+\end{center}
+
+
+
+\section{Conclusiones}
+
+La metodología propuesta en este capítulo permite agrupar las redes en una colección de una forma guiada por los datos, en contraste con el trabajo existente de Himelboim \textit{et al.} \cite{himelboim_classifying_2017}.
+
+\begin{figure}[htbp]
+   \centering
+   \includesvg[width=0.75\textwidth]{figures/plan.svg}
+    \caption{Resumen de metodología}
+    \label{fig:masterplan}
+\end{figure}
+
+
+La Fig. \ref{fig:masterplan} muestra un esquema general del método propuesto. 
+
+
