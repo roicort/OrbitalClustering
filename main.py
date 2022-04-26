@@ -7,13 +7,13 @@ from runner import parallelrunnerGC
 from embedding import OptKEmbedding, GetStabilityEmbedding, UsersMiniBatchKMeansEmbedding
 from clustering import OptKClustering, GetStabilityClustering, UsersDendrogramClustering 
 
-from utils import ColorNetworks, AuditCentroids, GraphletCorrelations
+from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSignature
 
 ########################################################################
 
 #Preprocessing
 
-#if graph2edges('../datasets/Tweemes','input/'):
+#if graph2edges('input/','input/'):
 #    msg.good("Preprocessing Done")
 
 ########################################################################
@@ -30,8 +30,8 @@ from utils import ColorNetworks, AuditCentroids, GraphletCorrelations
 #if OptKEmbedding("input/","stability/"):
     #msg.good("GAP Users Done")
 
-if GetStabilityEmbedding("input/","stability/",runs=50,K=5):
-    msg.good("Embedding Stability Done")
+#if GetStabilityEmbedding("input/","stability/",runs=50,K=5):
+#    msg.good("Embedding Stability Done")
 
 #if UsersMiniBatchKMeansEmbedding("input/","embeddings/",K=5):
 #    msg.good("KMeans Embedding Done!")
@@ -55,4 +55,5 @@ if GetStabilityEmbedding("input/","stability/",runs=50,K=5):
 
 #ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
 
+ViewSignature("exampleinput/","exampleinput/")
 

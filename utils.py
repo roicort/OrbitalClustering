@@ -138,3 +138,30 @@ def GraphletCorrelations(read_path,save_path):
     sns.set(font_scale=0.1)
     sns.heatmap(corr_matrix, annot=True)
     plt.savefig(save_path+"Graphlet-Corr.svg")
+
+
+def ViewSignature(read_path,save_path):
+
+    files = []
+
+    for r, _, f in os.walk(read_path):
+        for file in f:
+            if '.edges.signatures.txt' in file:
+                files.append([os.path.join(r, file),file.replace(".edges.signatures.txt","")])
+    files.sort()
+
+    msg.info("Preprocessing orbits")
+    aux = pd.DataFrame()
+    for file in tqdm(range(len(files))):
+        path = files[file][0]
+        name = files[file][1]
+        df = pd.DataFrame(np.loadtxt(path),index=None)
+        #df["Network"] = name
+        #aux = pd.concat([aux, df])
+        X = df.replace(0.0, np.nan)
+        X.dropna(axis='columns',how='all',inplace=True)
+        X = X.replace(np.nan,0)
+        X.columns = ["Orbit "+ str(i) for i in list(X.columns)]
+        print(X)
+        fig = px.imshow(X,text_auto=True)
+        fig.show()
