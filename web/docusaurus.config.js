@@ -55,10 +55,11 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
             label: 'Tesis',
           },
           //{to: '/blog', label: 'Blog', position: 'right'},
+          //{to: 'https://github.com/roicort/OrbitalClustering/blob/main/printLaTeX/OrbitalClustering.pdf', label: 'Tesis', position: 'right'},
           {to: '/networks', label: 'Redes', position: 'right'},
           {to: '/explore', label: 'Explorar', position: 'right'},
           {
-            to: 'https://github.com/facebook/docusaurus',
+            to: 'https://github.com/roicort/OrbitalClustering',
             label: 'GitHub',
             position: 'right',
           },
