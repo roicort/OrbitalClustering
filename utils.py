@@ -12,7 +12,6 @@ from sklearn import preprocessing as skp
 from yellowbrick.cluster import KElbowVisualizer
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 import plotly as py
 import plotly.graph_objs as go
@@ -163,5 +162,6 @@ def ViewSignature(read_path,save_path):
         X = X.replace(np.nan,0)
         X.columns = ["Orbit "+ str(i) for i in list(X.columns)]
         print(X)
-        fig = px.imshow(X,text_auto=True)
+        fig = px.imshow(X,text_auto=True,color_continuous_scale='viridis')
         fig.show()
+        fig.write_image("orbits.svg")

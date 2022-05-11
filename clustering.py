@@ -12,7 +12,6 @@ from sklearn import preprocessing as skp
 from yellowbrick.cluster import KElbowVisualizer
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 import plotly as py
 import plotly.graph_objs as go

@@ -2,7 +2,7 @@ import shutil
 from wasabi import msg
 
 from preprocessing import graph2edges
-from runner import parallelrunnerGC
+from runner import parallelrunnerGC, runnerGC
 
 from embedding import OptKEmbedding, GetStabilityEmbedding, UsersMiniBatchKMeansEmbedding
 from clustering import OptKClustering, GetStabilityClustering, UsersDendrogramClustering 
@@ -55,5 +55,5 @@ from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSigna
 
 #ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
 
-ViewSignature("exampleinput/","exampleinput/")
+ViewSignature("input/","input/")
 
