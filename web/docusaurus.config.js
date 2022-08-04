@@ -14,6 +14,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
   organizationName: 'roicort', // Usually your GitHub org/user name.
   projectName: 'proyectosocci', // Usually your repo name.
   plugins: ['docusaurus-plugin-sass'],
+  staticDirectories: ['static'],
 
   presets: [
     [
