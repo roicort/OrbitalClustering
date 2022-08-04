@@ -1,26 +1,19 @@
-
 \chapter{Experimentos y resultados}
 \label{sec:experiments}
 
-%\cleanchapterquote{Users do not care about what is inside the box, as long as the box does what they need done.}{Jef Raskin}{about Human Computer Interfaces}
-
-En este capítulo presentamos los resultados del análisis exploratorio de 75 redes reales asociadas a los \textit{trending topics} de \textit{Twitter} durante 2020. En un primer paso, utilizando la metodología propuesta se logró agrupar a los usuarios en 5 tipos de perfiles distintos de acuerdo a sus funciones estructurales para crear un primer \textit{embedding}. Posteriormente, una vez contados los perfiles de usuarios en cada red, se presenta el resultado del agrupamiento jerárquico para la colección redes. Al final del capítulo se discuten los resultados obtenidos, enfatizando los diferentes perfiles de usuario identificados en términos de los patrones de comportamiento sugeridos por sus componentes.
+En este capítulo presentamos los resultados del análisis de 75 redes temáticas reales asociadas a \textit{trending topics} de \textit{Twitter} en México durante 2020. En el primer paso de la metodología propuesta, se logró agrupar a los usuarios en 5 tipos de perfiles distintos de acuerdo las funciones estructurales inferidas de la firma orbital basada en graphlets. Posteriormente, una vez contados los perfiles de usuarios en cada red, se organizaron las diferentes redes a través del agrupamiento jerárquico aplicado en la colección. Al final del capítulo se discuten los resultados obtenidos, describiendo los diferentes perfiles de usuario identificados en términos de los patrones de comportamiento sugeridos por la frecuencia de sus órbitas. 
 
 \section{Conjunto de datos}
+Uno de los principales retos en este trabajo fue obtener los datos necesarios para formar las redes temáticas. Se construyeron 75 redes temáticas a partir de \textit{Trending Topics} (TTs) en Twitter haciendo un \textit{scrapping} de tweets. Todos los temas elegidos están entre los primeros cinco TTs reportados por Twitter con más de 20K tweets en México durante noviembre de 2020. Las redes fueron preprocesadas para eliminar los bucles (gente que se responde a sí misma en la plataforma) y los nodos aislados (gente que decide no interactuar).
 
-Uno de los principales retos en este trabajo fue obtener los datos necesarios para formar las redes temáticas. Después de la implementación del Reglamento General de Protección de Datos (RGPD), que entró en vigor el 25 de mayo de 2018, Twitter cambió sus términos y condiciones de uso así como la posibilidad de descargar datos de manera directa utilizando la API de Twitter.
-
-Para formar el conjunto de datos se construyeron 75 redes temáticas a partir de \textit{Trending Topics} (TTs) en Twitter haciendo un \textit{scrapping} de tweets. Todos los temas elegidos están entre los primeros cinco TTs reportados por Twitter con más de 20K tweets en México durante noviembre de 2020. Las redes fueron preprocesadas para eliminar los bucles (gente que se responde a sí misma en la plataforma) y los nodos aislados (gente que decide no interactuar).
-
-Todas las redes se crearon siguiendo la misma metodología, dando como resultado un conjunto de usuarios (nodos) y aristas dirigidas que corresponden a las interacciones de responder (incluyendo las menciones) y retuitear. No se utilizan etiquetas, por lo que ambas interacciones están igualmente representadas por una arista dirigida. 
+Todas las redes se crearon siguiendo la misma metodología, dando como resultado un conjunto de usuarios (nodos) y aristas dirigidas que corresponden a las interacciones de responder (incluyendo las menciones) y retwitear. No se utilizan etiquetas, por lo que ambas interacciones están igualmente representadas por una arista dirigida. 
 
 El orden y el tamaño de las redes están dentro del rango de $[1952,24876]$ y $[9515,35508]$ respectivamente. El conjunto de datos representa un total de 925896 nodos (usuarios) en la colección.
 
 \section{Primer agrupamiento: perfilando usuarios}
+Los perfiles de usuarios se basan en la firma orbital de cada nodo dentro de cada red considerando graphlets dirigidos. Las firmas orbitales de los nodos se calcularon con el software desarrollado por Anida Sarajlic et al. \cite{sarajlic_graphlet-based_2016}. 
 
-El perfil del usuario se basa en la firma de órbita de cada nodo dentro de cada grafo calculada a partir de graphlets dirigidos. Las firmas orbitales de los nodos se calcularon con el software desarrollado por Anida Sarajlic et al. \cite{sarajlic_graphlet-based_2016}. 
-
-Después de realizar el cálculo de las firmas orbitales, obtenemos un primer embedding en ${R}^{129}$ para cada nodo. Cada componente del vector representa el número de veces que un usuario (nodo) aparece en esa órbita. De esta manera, los vectores proveen información sobre los roles estructurales de los nodos (usuarios) dentro de la red.
+Después de realizar el cálculo de las firmas orbitales, obtenemos un primer \textit{embedding} en ${R}^{129}$ para cada nodo. Cada componente del vector representa el número de veces que un usuario (nodo) aparece en esa órbita. De esta manera, los vectores proveen información sobre los roles estructurales de los nodos (usuarios) dentro de la red.
 
  \begin{figure}[htbp]
    \centering
@@ -29,28 +22,33 @@ Después de realizar el cálculo de las firmas orbitales, obtenemos un primer em
     \label{fig:elbowmethod}
 \end{figure}
 
-Posteriormente, decidimos cuántos perfiles establecer para los usuarios. Con este objetivo, analizamos los vectores-usuario centrándonos en la suma de los errores cuadrados (\textit{SSE} o \textit{distortion}) con un número diferente de grupos, tratando de identificar el punto de máxima curvatura (método del codo). Elegimos $k = 5$ (véase \ref{fig:elbowmethod}).
+Posteriormente, decidimos cuántos perfiles establecer para los usuarios. Con este objetivo, analizamos el conjunto de vectores-usuario con el método del codo, centrándonos en la suma de los errores cuadrados (\textit{SSE} o \textit{distortion}), i.e., experimentamos con un número diferente de grupos, tratando de identificar el punto de máxima curvatura (método del codo) en el cambio de SSE. Con este procedimiento, elegimos $k = 5$ (ver Fig. \ref{fig:elbowmethod}).
 
-Para agrupar las firmas orbitales en todo el conjunto de datos de la red, se utilizó la implementación de Scikit-Learn de MiniBatch KMeans. El algoritmo de clustering se ejecutó con 500 inicializaciones aleatorias. En todos los casos, los centroides iniciales se calcularon utilizando el método de inicialización \textit{K-means++} \cite{arthur_k-means_nodate}. 
+Para agrupar las firmas orbitales en todo el conjunto de datos de la red, se utilizó la implementación de scikit-Learn de MiniBatch KMeans. El algoritmo de clustering se ejecutó con 500 inicializaciones aleatorias. En todos los casos, los centroides iniciales se calcularon utilizando el método de inicialización \textit{K-means++} \cite{arthur_k-means_nodate}. 
 
 \subsection{Estabilidad}
+Se utilizaron 50 ejecuciones de la tarea de agrupamiento para estimar la estabilidad de los grupos identificados. La Información Mutua Normalizada (NMI) por pares de las ejecuciones se muestra en la Figura \ref{fig:estability-NMI}; el valor medio fue de 0.93.
 
- \begin{figure}[htbp]
+\begin{figure}[htbp]
    \centering
    \includesvg[width=1\textwidth]{figures/5Embedding-NMIs.svg}
     \caption{Estabilidad del agrupamiento con K=5 utilizando Normalized Mutual Information}
     \label{fig:estability-NMI}
 \end{figure}
 
-Dado que la estabilidad es una cuestión importante en las solución del problema, se utilizaron 50 ejecuciones de la tarea para estimar la estabilidad de los grupos identificados. La Información Mutua Normalizada (NMI) por pares de las ejecuciones se muestra en la Figura \ref{fig:estability-NMI}; el valor medio fue de 0.93.
+\subsection{Perfiles identificados}
+Para analizar los diferentes tipos usuarios identificados, consideramos los centroides como representantes de grupo. 
 
- \begin{figure}[htbp]
+En los datos analizados, los grupos 1, 2, 4 y 5 están definidos por una órbita claramente dominante, mientras que el grupo 3 corresponde a una distribución más balanceada en los roles de sus usuarios. La Fig. \ref{fig:orbits} muestra las principales órbitas para cada grupo. 
+
+\begin{figure}[htbp]
    \centering
    \includesvg[width=1\textwidth]{figures/perfiles.svg}
     \caption{Perfiles encontrados}
     \label{fig:perfiles}
 \end{figure}
 
+La tabla \ref{table:orbitsgroups} expande la descripción de cada perfil al mostrar todas las órbitas con frecuencia relativa arriba de un umbral $\Delta = 0.06$, i.e., con un valor indicando que los usuarios en ese grupo participan en ese rol particular más del 5\% de las veces. 
 \begin{table}[]    
     \centering
     \caption{Caracterización de los perfiles identificados de acuerdo a sus órbitas. Para las órbitas principales (segunda columna), solo se muestran los componentes con magnitud mayor que $\Delta=0.06$.}
@@ -65,17 +63,10 @@ Dado que la estabilidad es una cuestión importante en las solución del problem
     \label{table:orbitsgroups}
 \end{table}
 
-\subsection{Perfiles identificados}
-Para analizar los diferentes tipos usuarios identificados, consideramos los centroides como representantes de grupo. 
-
-En los datos analizados, los grupos 1, 2, 4 y 5 están definidos por una órbita claramente dominante, mientras que el grupo 3 corresponde a una distribución más balanceada dentro de los roles de sus usuarios. La Figura \ref{fig:orbits} muestra las principales órbitas para cada grupo. 
-
-La tabla \ref{table:orbitsgroups} expande la descripción de cada perfil al mostrar todas las órbitas arriba de un umbral $\Delta = 0.06$, i.e., con un valor indicando que los usuarios en ese grupo participan en ese rol particular más del 5\% de las veces. 
-
-\section{Segundo agrupamiento: Agrupando redes}
+\section{Segundo agrupamiento: estructura en redes}
 \label{sec:experiments:clustering}
 
-A partir del análisis de los vectores obtenidos en el paso anterior, podemos observar la composición de las redes en el conjunto de datos en base al porcentaje de los tipos de usuarios que se encontraron. En la siguiente figura \ref{fig:composition} podemos observar que en la colección analizada existe evidencia una asimetría en la dinámica de comunicación de Twitter, con un gran grupo de usuarios que se involucra en la conversación principalmente a través de responder/apoyar lo que proponen unas pocas voces establecidas.  
+Usando los perfiles identificados en el paso anterior, podemos determinar la composición de las redes en la colección observando el porcentaje de los tipos de usuarios que se encuentran en cada red. En la Fig. \ref{fig:composition} se observa que en la colección analizada existe una asimetría en la dinámica de comunicación de Twitter, con un gran grupo de usuarios que se involucra en la conversación principalmente a través de responder/apoyar lo que proponen unas pocas voces establecidas.  
 
  \begin{figure}[htbp]
    \centering
@@ -84,9 +75,9 @@ A partir del análisis de los vectores obtenidos en el paso anterior, podemos ob
     \label{fig:composition}
 \end{figure}
 
-Es decir, como podemos observar en la Fig. \ref{fig:composition}, la composición de cada red en términos de los cinco perfiles de usuario revela diferentes dinámicas dentro de las redes. La mayoría de ellas están compuestas principalmente por usuarios con el perfil 4, lo que indica una dinámica muy jerarquizada en la que unos pocos usuarios tienen autoridad y fijan las ideas que circulan sobre el tema. El segundo perfil más común es el 3, seguido de los perfiles 1, 5 y 2.
+La Fig. \ref{fig:composition} muestra la composición de cada red en términos de los cinco perfiles de usuario y revela diferentes dinámicas dentro de las redes. La mayoría de ellas están compuestas principalmente por usuarios con el perfil 4, lo que indica una dinámica muy jerarquizada en la que unos pocos usuarios tienen autoridad y fijan las ideas que circulan sobre el tema. El segundo perfil más común es el 3, seguido de los perfiles 1, 5 y 2.
 
-Una vez establecidos los vectores de Embedding, se utilizó  el agrupamiento aglomerativo para buscar grupos a partir de la caracterización de usuarios. En la figura \ref{fig:dendro-ward} podemos observar el dendrograma correspondiente utilizando \textit{Ward Linkage} y en \ref{fig:dendro-complete} utilizando \textit{Complete Linkage}.
+Con estos vectores, se utilizó agrupamiento jerárquico aglomerativo para buscar grupos. En la Figura \ref{fig:dendro-ward} podemos observar el dendrograma que resulta al utilizar \textit{Ward Linkage} y en la Figura \ref{fig:dendro-complete} el dendrograma correspondiente a \textit{Complete Linkage}.
 
  \begin{figure}[htbp]
    \centering
@@ -103,16 +94,14 @@ Una vez establecidos los vectores de Embedding, se utilizó  el agrupamiento agl
 \end{figure}
 
 \section{Visualización de resultados}
-
  \begin{figure}[htbp]
    \centering
    \includesvg[width=0.5\textwidth]{images/qrcode.svg}
     \caption{Código qr para acceder a la \href{https://roicort.github.io/OrbitalClustering}{herramienta web}.}
-    \label{img:web-comp}
+    \label{img:web-qr}
 \end{figure}
 
-Para explorar visualmente los resultados, se desarrolló una herramienta web utilizando las tecnologías de Docusaurus y React. 
-El sitio web es estático y esta disponible en GithubPages. 
+Para explorar visualmente los resultados, se desarrolló una herramienta web utilizando las tecnologías de Docusaurus y React. El sitio web es estático y esta disponible en GithubPages (ver Figuras \ref{img:web-qr} y \ref{img:web-main}). 
 
  \begin{figure}
    \centering
@@ -121,7 +110,7 @@ El sitio web es estático y esta disponible en GithubPages.
     \label{img:web-main}
 \end{figure}
 
-La herramienta web tiene distintas pestañas que permiten explorar distintos aspectos del trabajo. La primera, permite explorar con una gráfica de radar la composición por tipo de usuarios de la red seleccionada. La \ref{img:web-comp} ejemplifica la composición de una red.
+La herramienta web tiene distintas pestañas que permiten explorar distintos aspectos de nuestro trabajo. La primera, permite explorar con una gráfica de radar la composición por tipo de usuarios de la red seleccionada. La \ref{img:web-comp} ejemplifica la composición de una de las redes temáticas en la colección.
 
  \begin{figure}
    \centering
@@ -130,7 +119,7 @@ La herramienta web tiene distintas pestañas que permiten explorar distintos asp
     \label{img:web-comp}
 \end{figure}
 
-Otra de las funciones principales es la visualización de los grafos con sus respectivos nodos coloreados de acuerdo al perfil que pertenecen. La \ref{img:web-graph} nos muestra la red de Coco, esta visualización del grafo nos da algunas nociones sobre las interacciones dentro de la red.
+Otra de las funciones principales es la visualización de los grafos con sus respectivos nodos coloreados de acuerdo al perfil que pertenecen. La Figura \ref{img:web-graph} nos muestra la red de \#Coco, visibilizando algunas interacciones dentro de la red.
 
  \begin{figure}
    \centering
@@ -139,7 +128,7 @@ Otra de las funciones principales es la visualización de los grafos con sus res
     \label{img:web-graph}
 \end{figure}
 
-Los grafos que se presentan a continuación fueron escogidos al ser los más lejanos de acuerdo al agrupamiento jerárquico. En \ref{fig:net-salario} observamos la red correspondiente al \#Salario Rosa en las que la mayoría de las cuentas interactúan con un único usuario. Este tipo de comportamiento podría sugerir que el hashtag nace a partir de un gran influenciador o que se trata de cuentas automatizadas que tienen el objetivo de hacer central a un usuario en la red. En la \ref{fig:net-coco} podemos observar una red más bien fragmentada en la que no existe una conversación central.
+Los grafos que se muestran a continuación fueron escogidos como ejemplos por ser los más lejanos de acuerdo al agrupamiento jerárquico. En \ref{fig:net-salario} observamos la red correspondiente al \#Salario Rosa en las que la mayoría de las cuentas interactúan con un único usuario. Este tipo de comportamiento podría sugerir que el hashtag (\#) nace a partir de un gran influenciador o que se trata de cuentas automatizadas que tienen el objetivo de hacer central a un usuario en la red. En contraste, la \ref{fig:net-coco} muestra una red más bien fragmentada en la que no existe una conversación central.
 
 \begin{figure}
     \centering
@@ -151,7 +140,7 @@ Los grafos que se presentan a continuación fueron escogidos al ser los más lej
 \begin{figure}
     \centering
     \includegraphics[width=.75\textwidth]{images/Coco.png}
-    \caption{Red Coco coloreada respecto al grupo al que pertenece cada nodo en la red.}
+    \caption{Red \#Coco coloreada respecto al grupo al que pertenece cada nodo en la red.}
     \label{fig:net-coco}
 \end{figure}
 
@@ -159,20 +148,20 @@ Los grafos que se presentan a continuación fueron escogidos al ser los más lej
 \begin{table}[h]
     \begin{center}
         \csvautotabular{csv/embeddings-comp.csv}
-        \caption{Comparación de los embeddings de las redes de Coco y \#SalarioRosa2}
+        \caption{Comparación de los \textit{embeddings} de las redes de \#Coco y \#SalarioRosa2}
     \end{center}
 \end{table}
 
 
 \section{Discusión}
-
 En el conjunto de datos analizado, cuatro de los perfiles (1, 2, 4, 5) se distinguen por la presencia de una órbita dominante en el vector centroide representativo. En cambio, el grupo restante (3) tiene una distribución de órbitas más equilibrada en el vector de firmas de su centroide.
 
-A continuación, se presenta una caracterización para cada uno de los perfiles de usuario identificados.  
+A continuación, se presenta una caracterización para cada uno de los perfiles de usuario identificados. Aunque la discusión se centra en los perfiles específicos identificados para esta colección, ejemplifica el tipo de análisis que puede derivarse de la metodología propuesta en este trabajo.   
 
 \begin{itemize} 
 
-\item \emph{Perfil 1, Esparcidor.} La órbita dominante es la 1, que desempeña el papel de un pozo en el graphlet compuesto por un solo arco. Las órbitas 2, 6 y 11 (todas ellas órbitas fuente) nunca aparecen en los vectores de firmas de estos usuarios. Analizando los vecindarios con tres nodos, las pocas veces que este perfil desempeña el papel de oyente, también lo hace de audiencia. Dada la alta frecuencia de la órbita dominante, es razonable suponer que estos usuarios producen información que motiva a los lectores a responder. \begin{figure}[htbp]
+\item \emph{Perfil 1, Difusor.} La órbita dominante es la 1, que desempeña el papel de un pozo en el graphlet compuesto por un solo arco. Las órbitas 2, 6 y 11 (todas ellas órbitas fuente) nunca aparecen en los vectores de firmas de estos usuarios. Analizando los vecindarios con tres nodos, las pocas veces que este perfil desempeña el papel de oyente, también lo hace de audiencia. Dada la alta frecuencia de la órbita dominante, es razonable suponer que estos usuarios producen información que motiva a los lectores a responder. 
+\begin{figure}[htbp]
    \centering
    \includesvg[width=0.25\textwidth]{figures/Or-1.svg}
     \caption{Graphlet 0 y órbita 1.}
@@ -206,7 +195,7 @@ A continuación, se presenta una caracterización para cada uno de los perfiles 
 
 Las órbitas 30, 63, 85, 91, 105, 118 y 125 son hablantes con un grado de salida igual a 3, que aparecen con muy poca frecuencia en las firmas de los perfiles identificados. Es de esperar que estas órbitas aparezcan en usuarios reconocidos como \textit{Influencers} de la red. La presencia de la órbita 29 en el perfil de Reportero sugiere que la órbita 30 aparece varias veces en una red. Curiosamente, la órbita 30 aparece de forma distribuida, sin ser la órbita principal en los perfiles Locutor, Conversador o NonConformer.
 
-En cuanto a la agrupación de las redes, la metodología propuesta puede ordenar la colección y definir grupos interpretables que proporcionan una visión de la dinámica originada por los diferentes temas. Los grupos no responden a una diferenciación temática, lo que refuerza la idea de que los procesos de difusión en Twitter no dependen sólo del contenido. No obstante, el análisis revela diferencias entre las redes con algunas que incluso muestran una clara variación en cuanto a la distribución del papel de los usuarios en la circulación de ideas a través de Twitter. 
+En cuanto a la agrupación de las redes, la metodología propuesta permite ordenar la colección y definir grupos interpretables que proporcionan una visión de la dinámica originada por los diferentes temas. Los grupos no responden a una diferenciación temática, lo que refuerza la idea de que los procesos de difusión en Twitter no dependen sólo del contenido. No obstante, el análisis revela diferencias entre las redes sugiriendo una clara variación en cuanto a roles que emergen entre los usuarios y el efecto que esto tiene en la circulación de ideas a través de Twitter. 
 
-En el grupo de las redes que muestran una alta inequidad en las opiniones propagadas (redes más a la izquierda en la Fig. \ref{fig:composition}), con unas pocas voces autorizadas (locutores) de las que se hacen eco otros perfiles (reporteros), encontramos algunas iniciativas gubernamentales (\#SalarioRosa, \#OfrendaEdoMex, \#TarjetaRosa). Podría darse el caso de que algunos tuits sean lanzados y manejados estratégicamente para aumentar su importancia. En el otro lado del espectro (instancias más a la derecha en la Fig. \ref{fig:composition}), encontramos redes temáticas relacionadas con películas y temas generales (Coco, Karol, FelizMiercoles) que abarcan un intercambio de información más distribuido, lo que sugiere un tema con un mayor nivel de participación y menos voces predominantes sobre el tema. 
+En el grupo de las redes que muestran una alta inequidad en las opiniones propagadas (redes más a la izquierda en la Fig. \ref{fig:composition}), con unas pocas voces autorizadas (locutores) de las que se hacen eco otros perfiles (reporteros), encontramos algunas iniciativas gubernamentales (\#SalarioRosa, \#OfrendaEdoMex, \#TarjetaRosa). Podría darse el caso de que algunos tweets sean lanzados y manejados estratégicamente para aumentar su importancia. En el otro lado del espectro (instancias más a la derecha en la Fig. \ref{fig:composition}), encontramos redes temáticas relacionadas con películas y temas generales (Coco, Karol, FelizMiercoles) que abarcan un intercambio de información más distribuido, lo que sugiere un tema con un mayor nivel de participación y menos voces predominantes sobre el tema. 
 

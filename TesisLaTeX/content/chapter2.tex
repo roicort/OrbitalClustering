@@ -159,13 +159,13 @@ Se han propuesto distintas medidas estructurales para capturar patrones dentro d
 
 \section{\textit{Representation Learning y Embeddings}}
 
-Como discutíamos anteriormente los algoritmos clásicos de Aprendizaje de Máquina \ref{sec:ML} no puede ser utilizados directamente para realizar agrupamientos en redes debido a las dificultades anteriormente mencionadas. Una de las estrategias recientes para resolver este problema es extraer características de los nodos o el grafo entero y utilizarlas para crear de una representación vectorial y de esta manera poder utilizar medidas clásicas de distancia en este espacio y algoritmos clásicos de aprendizaje de máquina. Este proceso de extracción de características es llamado Representation Learning y a la representación de las mismas \textit{Embedding}, pero para el fin de este documento utilizaremos estos dos términos de manera intercambiable.
+Como discutíamos anteriormente los algoritmos clásicos de Aprendizaje de Máquina \ref{sec:ML} no puede ser utilizados directamente para realizar agrupamientos en redes debido a las dificultades anteriormente mencionadas. Una de las estrategias recientes para resolver este problema es extraer características de los nodos o el grafo entero y utilizarlas para crear de una representación vectorial y de esta manera poder utilizar medidas clásicas de distancia en este espacio y algoritmos clásicos de aprendizaje de máquina. Este proceso de extracción de características es llamado Representation Learning y a la representación de las mismas \textit{embedding}, pero para el fin de este documento utilizaremos estos dos términos de manera intercambiable.
 
-El Embedding puede obtenerse para cada nodo o para representar un grafo entero. Existen numerosas técnicas para representar un nodo, puede ser a partir de basado en su vecindario, por su estructura topológica o sus atributos. En el caso de el Embedding de un grafo la extracción de características puede dividirse en dos principales categorías: técnicas basadas en la topología global de la red y técnicas basadas en subestructuras a nivel de los nodos de la red.
+El \textit{embedding} puede obtenerse para cada nodo o para representar un grafo entero. Existen numerosas técnicas para representar un nodo, puede ser a partir de basado en su vecindario, por su estructura topológica o sus atributos. En el caso de el \textit{embedding} de un grafo la extracción de características puede dividirse en dos principales categorías: técnicas basadas en la topología global de la red y técnicas basadas en subestructuras a nivel de los nodos de la red.
 
-\subsection{Embedding Nivel Nodo}
+\subsection{\textit{Embedding} Nivel Nodo}
 
-Los Embeddings a nivel nodo han sido ampliamente explorados en años recientes, en gran medida debido a los retos que enfrentan las grandes tecnológicas para perfilar enormes cantidades de usuarios dentro de distintas redes  \cite{lerer_pytorch-biggraph_2019} y por muchas más aplicaciones, por ejemplo en el área de biología y química.
+Los \textit{embedding} a nivel nodo han sido ampliamente explorados en años recientes, en gran medida debido a los retos que enfrentan las grandes tecnológicas para perfilar enormes cantidades de usuarios dentro de distintas redes  \cite{lerer_pytorch-biggraph_2019} y por muchas más aplicaciones, por ejemplo en el área de biología y química.
 A continuación se presentan algunos conceptos útiles para comprender muchos algoritmos para este tipo de tarea.
 
 \paragraph{Random Walks}
@@ -173,7 +173,7 @@ Una Caminata Aleatoria (Random Walk) es un proceso estocástico en el espacio ma
 
 \subsubsection{Neighbourhood-based Node Embedding}
 
-Esta familia de algoritmos extrae características de la vecindad de un grafo para obtener una representación. Existen distintas técnicas para obtener un vector como Embedding, a continuación una breve reseña de algunos algoritmos y los métodos que utilizan.
+Esta familia de algoritmos extrae características de la vecindad de un grafo para obtener una representación. Existen distintas técnicas para obtener un vector como\textit{embedding}, a continuación una breve reseña de algunos algoritmos y los métodos que utilizan.
 
 \begin{center}
     \begin{tabular}{ |p{8cm}|p{2cm}|  }
@@ -241,12 +241,12 @@ Esta familia de algoritmos extrae características de la vecindad de un grafo pa
 
 \subsection{Embedding Nivel Grafo}
 
-En general los algoritmos que hacen uso de Embeddings para agrupar redes siguen cuatro pasos principales que se describen a continuación.
+En general los algoritmos que hacen uso de \textit{embeddings} para agrupar redes siguen cuatro pasos principales que se describen a continuación.
 
 \begin{itemize}
     \item Extracción de características: Se extraen patrones o características de la estructura topológica de los grafos a agrupar.
     
-    \item Agregación de características: Se agregan estas características a los vectores que caracterizarán el grafo para de esta manera componer los Embeddings de los grafos.
+    \item Agregación de características: Se agregan estas características a los vectores que caracterizarán el grafo para de esta manera componer los \textit{embeddings} de los grafos.
     
     \item Cálculo de la distancia: Calcular la distancia entre los vectores de los grafos para cuantificar la similitud entre los mismos.
     
@@ -286,14 +286,12 @@ Este tipo de propiedades se centran en la topología general de la red y tratan 
 
 \subsubsection{Características de los Nodos} Este tipo de propiedades a diferencia de las propiedades globales de la red se centran en características locales entre los nodos que la conforman. Los algoritmos que extraen características de los nodos examinan las estructuras locales haciendo uso de subgrafos, por ejemplo, EgoNetworks o Graphlets.
 
-\subsection{Caso especial: Redes Neuronales}
-
-Recientemente se han adaptado las Redes Neuronales para trabajar con grafos. Algoritmos como Pytorch:BiGraph \cite{lerer_pytorch-biggraph_2019} son extremadamente eficientes a la hora de obtener embeddings para nodos en redes enormes. No obstante al igual que otras algoritmos de esta clase heredan las problemáticas de interpretación de las redes neuronales dada su naturaleza de caja negra.
-
 \section{Interpretabilidad}
 
 A pesar de que los algoritmos de Aprendizaje de Máquina funcionan muy bien, muchas veces es difícil conocer las reglas que el algoritmo ha creado en el modelo aprendido y por lo tanto no es posible comprender como es que un problema esta siendo resuelto, a este problema se le conoce como el problema de interpretabilidad de un modelo. \cite{zhang_survey_2021} \cite{rebala_introduction_2019} 
 
 Este problema esta especialmente presente en las Redes Neuronales que tienen millones de parámetros y por lo tanto es complicado interpretar las decisiones o la serie de reglas que llevan a cabo para resolver un problema. En algunas áreas es igual de importante la interpretabilidad del modelo que su precisión, un ejemplo claro es el de la medicina en donde los médicos deben ser capaces de interpretar y confirmar los resultados del diagnóstico de un algoritmo. En el contexto de Twitter es igualmente importante interpretar los motivos por los que las redes son agrupadas.
+
+Recientemente se han adaptado las Redes Neuronales para trabajar con grafos. Algoritmos como Pytorch:BiGraph \cite{lerer_pytorch-biggraph_2019} son extremadamente eficientes a la hora de obtener \textit{embeddings} para nodos en redes enormes. No obstante al igual que otras algoritmos de esta clase heredan las problemáticas de interpretación de las redes neuronales.
 
 %Explicar que en el contexto de Twitter nos importa no sólo cómo quedan los grupos sino por qué. Redes sociales, lo que sociólogos han hecho con estas ideas (como en la parte de antecedentes del paper).
