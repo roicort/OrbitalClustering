@@ -42,6 +42,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      metadata: [{name: 'theme-color', content: '#A41034'}],
       navbar: {
         title: 'Orbital Clustering',
         logo: {

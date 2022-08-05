@@ -6,13 +6,16 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 
+import SafariColor from '../../src/js/color.config.js';
+
 import {useColorMode} from '@docusaurus/theme-common';
 
 import { Points, PointMaterial } from '@react-three/drei'
 import * as random from 'maath/random/dist/maath-random.esm'
 
-import {useThemeConfig
-} from '@docusaurus/theme-common';
+import {useThemeConfig} from '@docusaurus/theme-common';
+
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 ////////////////////////////////////////////////////////////
 
@@ -51,15 +54,6 @@ function Stars(props) {
 function HomepageGeometry() {
 
   const {siteConfig} = useDocusaurusContext();
-  const colorModeToggle = useColorModeToggle();
-  var isDark;
-
-  if(colorModeToggle.colorMode === 'dark'){
-    isDark = true;
-  }
-  else{
-    isDark = false;
-  }
 
   return (
     <header className={clsx(styles.heroCanvas)}>
@@ -87,11 +81,16 @@ function HomepageGeometry() {
 ////////////////////////////////////////////////////////////////////////////////
 
 export default function Home() {
+
   const {siteConfig} = useDocusaurusContext();
+
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
+      <BrowserOnly>
+        <SafariColor />
+      </BrowserOnly>
       <HomepageGeometry/>
     </Layout>
   );
