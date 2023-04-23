@@ -155,13 +155,57 @@ def ViewSignature(read_path,save_path):
         path = files[file][0]
         name = files[file][1]
         df = pd.DataFrame(np.loadtxt(path),index=None)
-        #df["Network"] = name
-        #aux = pd.concat([aux, df])
         X = df.replace(0.0, np.nan)
         X.dropna(axis='columns',how='all',inplace=True)
         X = X.replace(np.nan,0)
         X.columns = ["Orbit "+ str(i) for i in list(X.columns)]
-        print(X)
-        fig = px.imshow(X,text_auto=True,color_continuous_scale='viridis')
+        # Get dtypes of each column
+        print(X.dtypes)
+        fig = px.imshow(X,labels=dict(x="Orbits", y="Nodes", color="Value"))
         fig.show()
-        fig.write_image("orbits.svg")
+        #fig.write_image("orbits.svg")
+
+def ViewComposition(read_path,save_path):
+
+    files = []
+
+    for r, _, f in os.walk(read_path):
+        for file in f:
+            if '-NormMiniBatchUsersEmbedding' in file:
+                files.append([os.path.join(r, file),file])
+
+    for file in tqdm(range(len(files))):
+        path = files[file][0]
+        name = files[file][1]
+        
+        df = pd.read_csv(path)
+
+        # Replace Column Names
+
+        df.columns = ["Network","1","2","3","4","5"]
+
+        # Order df by 1,2,3,4,5
+
+        df = df.sort_values(by=['1','2','3','4','5'],ascending=False)
+
+        # Plot df in Stacked Bar Chart
+
+        fig = px.bar(df, x="Network", y=["1", "2", "3", "4", "5"], barmode="stack")
+
+        # Set values for x and y axes
+
+        fig.update_layout(xaxis_title="Red", yaxis_title="Composición")
+        fig.update_layout(
+                font=dict(
+                    family="Courier New, monospace",
+                    size=5,  # Set the font size here
+                )
+            )
+
+        # Set legend title
+
+        fig.update_layout(legend_title="Perfil")
+
+        # Save plot
+
+        fig.write_image(save_path+name+"-composicion.svg")

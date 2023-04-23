@@ -7,7 +7,7 @@ from runner import parallelrunnerGC, runnerGC
 from embedding import OptKEmbedding, GetStabilityEmbedding, UsersMiniBatchKMeansEmbedding
 from clustering import OptKClustering, GetStabilityClustering, UsersDendrogramClustering 
 
-from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSignature
+from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSignature, ViewComposition
 
 ########################################################################
 
@@ -55,5 +55,9 @@ from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSigna
 
 #ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
 
-ViewSignature("input/","input/")
+#ViewSignature("input/","input/")
+
+ViewComposition("embeddings/","embeddings/")
+
+########################################################################
 
