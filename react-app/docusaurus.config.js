@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 (module.exports = {
   title: 'Orbital Clustering',
   tagline: "Clustering twitter networks by their users' structural profile.",
-  url: 'https://socci.xyz',
+  url: 'https://roicort.github.io',
   baseUrl: '/OrbitalClustering/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -42,7 +42,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      metadata: [{name: 'theme-color', content: '#A41034'}],
+      metadata: [{name: 'theme-color'}],
       navbar: {
         title: 'Orbital Clustering',
         logo: {
