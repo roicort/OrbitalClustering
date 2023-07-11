@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunksoccisaurus=self.webpackChunksoccisaurus||[]).push([[431],{4573:function(s){s.exports=JSON.parse('{"label":"about","permalink":"/OrbitalClustering/blog/tags/about","allTagsPath":"/OrbitalClustering/blog/tags","count":1}')}}]);
