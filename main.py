@@ -53,11 +53,11 @@ from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSigna
 
 #AuditCentroids("embeddings/5-CentroidsMiniBatchEmbedding.out")
 
-#ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
+ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
 
 #ViewSignature("input/","input/")
 
-ViewComposition("embeddings/","embeddings/")
+#ViewComposition("embeddings/","embeddings/")
 
 ########################################################################
 

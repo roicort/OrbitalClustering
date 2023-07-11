@@ -41,9 +41,9 @@ def AuditCentroids(centroids_path):
 
 def ColorNetworks(read_path,users_path,save_path):
 
-    colors = [{"name":"Prussian blue","hex":"023047","rgb":[2,48,71],"cmyk":[97,32,0,72],"hsb":[200,97,28],"hsl":[200,95,14],"lab":[18,-5,-18]},{"name":"Red (Pantone)","hex":"ef233c","rgb":[239,35,60],"cmyk":[0,85,75,6],"hsb":[353,85,94],"hsl":[353,86,54],"lab":[52,73,40]},{"name":"Selective yellow","hex":"ffb703","rgb":[255,183,3],"cmyk":[0,28,99,0],"hsb":[43,99,100],"hsl":[43,100,51],"lab":[79,15,81]},{"name":"Bondi blue","hex":"0095b6","rgb":[0,149,182],"cmyk":[100,18,0,29],"hsb":[191,100,71],"hsl":[191,100,36],"lab":[57,-21,-26]},{"name":"Light sea green","hex":"2ec4b6","rgb":[46,196,182],"cmyk":[77,0,7,23],"hsb":[174,77,77],"hsl":[174,62,47],"lab":[72,-41,-4]}]
+    colors = [{"name":"Red (Pantone)","hex":"ef233c","rgb":[239,35,60],"cmyk":[0,85,75,6],"hsb":[353,85,94],"hsl":[353,86,54],"lab":[52,73,40]},{"name":"Light sea green","hex":"2ec4b6","rgb":[46,196,182],"cmyk":[77,0,7,23],"hsb":[174,77,77],"hsl":[174,62,47],"lab":[72,-41,-4]},{"name":"Prussian blue","hex":"023047","rgb":[2,48,71],"cmyk":[97,32,0,72],"hsb":[200,97,28],"hsl":[200,95,14],"lab":[18,-5,-18]},{"name":"Bondi blue","hex":"0095b6","rgb":[0,149,182],"cmyk":[100,18,0,29],"hsb":[191,100,71],"hsl":[191,100,36],"lab":[57,-21,-26]},{"name":"Selective yellow","hex":"ffb703","rgb":[255,183,3],"cmyk":[0,28,99,0],"hsb":[43,99,100],"hsl":[43,100,51],"lab":[79,15,81]}]
 
-    #https://coolors.co/023047-ef233c-ffb703-0095b6-2ec4b6
+    #https://coolors.co/ef233c-2ec4b6-023047-0095b6-ffb703
 
     files = []
 
