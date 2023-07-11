@@ -122,8 +122,9 @@ export default function Home({...props}) {
         <option>Selecciona una red</option>
         <option value="data/networks/SalarioRosa2.json">#SalarioRosa2</option>
         <option value="data/networks/Coco.json">Coco</option>
+        <option value="data/networks/Yakult.json">Yakult</option>
         </Form.Select>
-        <Button variant="primary" onClick={() => loadgraph(name)}>Cargar</Button>
+        <Button variant="primary" onClick={() => loadgraph(name)}>Ver</Button>
     </Stack>
 
     </div>
