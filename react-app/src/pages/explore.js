@@ -100,6 +100,13 @@ export default function Home({...props}) {
     loadJSON(name, setGraph, function(err) {console.log('error')})
   }
 
+  const getOptions = () => {
+    const names = ['KAROL.json', '#FelizMartes.json', 'Worlds2020.json', 'Cruz_Azul.json', '#TarjetaRosa.json', 'Coco.json', 'Ravens.json', '#1MTrajeados.json', '#JusticeForJohnnyDepp.json', 'Best_Buy_Liquidacion.json', '#MatriomonioIgualitarioPuebla.json', 'Checo.json', 'Europa_League.json', 'Yakult.json', '#Xavi.json', '#SalarioRosa2.json', 'Chivas.json', '#POSITIONS.json', '#WonderAtMidnight.json', '#ImolaGP.json', '#SiguesTuLopez.json', '#LaBrujaDelPalacio.json', '#MasterChefMx.json', 'DiaDeMuertos.json', '#UnPeligroParaMexico.json', '#NiallHoran.json', '#Fakeministas.json', '#DiaInternacionalDelHombre.json', '#nosfaltajorge.json', 'Greta.json', 'Manchester_United.json', '#TrumpvsBiden.json', '#AMLOLujoDePresidente.json', '#TheMandalorian.json', '#FelizLunes.json', 'Viena.json', 'HereWeGo.json', 'Bob_Esponja.json', '#Fortnite.json', 'Dinamarca.json', '#OfrendaEdomex.json', '#Temblor.json', '#ARMY.json', 'Maluma.json', '#HalaMadrid.json', 'Bloomberg.json', '#CovidDerrotaAPuebla.json', 'SpotifyWrapped.json', 'Halloween.json', '#SerieMundial.json', '#FelizMiercoles.json', 'Rayados.json', '#LordMontajes.json', '#HappyAuronDay.json', 'Pumas.json', '#SoloLasMujeresMenstruan.json', 'Pfizer.json', '#BuenFinSeguro.json', '#AvisoCovidEdomex.json', 'Best_Buy.json', 'FONDEN.json', 'SystemofaDown.json', '#Confetti.json', '#Elecciones2020.json', '#AntorchaAyudaATabasco.json', 'Brozo.json', '#RatitaNoEstasSolo.json', 'Chile.json', 'Trump.json', '#XSXFridgeSweeps.json', '#GoPackGo.json', '#ByeByeTrump.json', 'Censura.json', '#CuidemosTodosDeTodos.json', '#JusticiaParaAlexis.json']
+    return names.map((name) => {
+      return <option key={name} value={'data/networks/'+name.replace('#','')}>{name.replace('.json','')}</option>
+    })
+  }
+
   // handle submit event
 
   return (
@@ -120,9 +127,7 @@ export default function Home({...props}) {
     <Stack direction="horizontal" gap={3}>
         <Form.Select onChange={handleChange} className="me-auto">
         <option>Selecciona una red</option>
-        <option value="data/networks/SalarioRosa2.json">#SalarioRosa2</option>
-        <option value="data/networks/Coco.json">Coco</option>
-        <option value="data/networks/Yakult.json">Yakult</option>
+        {getOptions()}
         </Form.Select>
         <Button variant="primary" onClick={() => loadgraph(name)}>Ver</Button>
     </Stack>
