@@ -9,55 +9,167 @@ from clustering import OptKClustering, GetStabilityClustering, UsersDendrogramCl
 
 from utils import ColorNetworks, AuditCentroids, GraphletCorrelations, ViewSignature, ViewComposition
 
+from radicli import Radicli, Arg
+
+########################################################################
+
+#Radical CLI
+
+cli = Radicli()
+
 ########################################################################
 
 #Preprocessing
 
-#if graph2edges('input/','input/'):
-#    msg.good("Preprocessing Done")
+@cli.command(
+    "preprocessing",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
+
+def preprocessing(inputt: str = 'input/', outputt: str = 'input/'):
+    if graph2edges(inputt,output):
+        msg.good("Preprocessing Done")
 
 ########################################################################
 
 #PreCompute
 
-#if parallelrunnerGC('input/','logs/',threads=4):
-#    msg.good("Parallel precompute done")
+@cli.command(
+    "precompute",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    logss=Arg("--logs", "-l", help="Logs Directory"),
+    threadss=Arg("--threads", "-t", help="Number of Threads"),
+)
+
+def precompute(inputt: str = 'input/', logss: str = 'logs/', threadss: int = 4):
+    if parallelrunnerGC(inputt,logss,threads=threadss):
+        msg.good("Parallel precompute done")
 
 ########################################################################
 
 ## First Clustering (Users Caracterization)
 
-#if OptKEmbedding("input/","stability/"):
-    #msg.good("GAP Users Done")
+@cli.command(
+    "optimKE",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
 
-#if GetStabilityEmbedding("input/","stability/",runs=50,K=5):
-#    msg.good("Embedding Stability Done")
+def optimKE(inputt: str = 'input/', outputt: str = 'stability/'):
+    if OptKEmbedding(inputt,outputt):
+        msg.good("GAP Users Done")
 
-#if UsersMiniBatchKMeansEmbedding("input/","embeddings/",K=5):
-#    msg.good("KMeans Embedding Done!")
+@cli.command(
+    "stabilityE",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+    runss=Arg("--runs", "-r", help="Number of Runs"),
+    K=Arg("--K", "-k", help="Number of Clusters"),
+)
+
+def stabilityE(inputt: str = 'input/', outputt: str = 'stability/', runss: int = 50, K: int = 5):
+    if GetStabilityEmbedding(inputt,outputt,runs=runss,K=K):
+        msg.good("Embedding Stability Done")
+
+@cli.command(
+    "embedding",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+    K=Arg("--K", "-k", help="Number of Clusters"),
+)
+
+def embedding(inputt: str = 'input/', outputt: str = 'embeddings/', K: int = 5):
+    if UsersMiniBatchKMeansEmbedding(inputt,outputt,K=K):
+        msg.good("KMeans Embedding Done")       
+
+########################################################################
 
 ## Second Clustering (Graph Clustering)
 
-#if OptKClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","clustering/"):
-#    msg.good("GAP Graphs Done")
+@cli.command(
+    "optimKC",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
 
-#if GetStabilityClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","clustering/",runs=50,K=3):
-#    msg.good("NetworkClustering Stability Done")
+def optimKC(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', outputt: str = 'clustering/'):
+    if OptKClustering(inputt,outputt):
+        msg.good("GAP Graphs Done")
 
-#if UsersDendrogramClustering("embeddings/5-NormMiniBatchUsersEmbedding.csv","clustering/", name = "Norm"):
-#    msg.good("Dendrogram Norm Done")
+@cli.command(
+    "stabilityC",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+    runss=Arg("--runs", "-r", help="Number of Runs"),
+    K=Arg("--K", "-k", help="Number of Clusters"),
+)
+
+def stabilityC(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', outputt: str = 'clustering/', runss: int = 50, K: int = 5):
+    if GetStabilityClustering(inputt,outputt,runs=runss,K=K):
+        msg.good("NetworkClustering Stability Done")
+
+@cli.command(
+    "clustering",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+    K=Arg("--K", "-k", help="Number of Clusters"),
+)
+
+def clustering(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', outputt: str = 'clustering/', K: int = 5):
+    if UsersDendrogramClustering(inputt,outputt,K=K):
+        msg.good("Dendrogram Done")
 
 ########################################################################
 
-#GraphletCorrelations("input/","./")
+#PostProcessing
 
-#AuditCentroids("embeddings/5-CentroidsMiniBatchEmbedding.out")
+@cli.command(
+    "correlations",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
 
-ColorNetworks("input/","embeddings/5-CompleteMiniBatchUsers.csv","colored/")
+def correlations(inputt: str = 'input/', outputt: str = './'):
+    GraphletCorrelations(inputt,outputt)
 
-#ViewSignature("input/","input/")
+@cli.command(
+    "audit",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+)
 
-#ViewComposition("embeddings/","embeddings/")
+def audit(inputt: str = 'embeddings/5-CentroidsMiniBatchEmbedding.out'):
+    AuditCentroids(inputt)
+
+@cli.command(
+    "colornetworks",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    clusterss=Arg("--clusters", "-c", help="Clusters File"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
+
+def colornetworks(inputt: str = 'input/', clusterss: str = 'embeddings/5-CompleteMiniBatchUsers.csv', outputt: str = 'colored/'):
+    ColorNetworks(inputt,clusterss,outputt)
+
+@cli.command(
+    "viewsignature",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
+
+def viewsignature(inputt: str = 'input/', outputt: str = 'input/'):
+    ViewSignature(inputt,outputt)
+
+@cli.command(
+    "viewcomposition",
+    inputt=Arg("--input", "-i", help="Input Directory"),
+    outputt=Arg("--output", "-o", help="Output Directory"),
+)
+
+def viewcomposition(inputt: str = 'embeddings/', outputt: str = 'embeddings/'):
+    ViewComposition(inputt,outputt)
 
 ########################################################################
 
+if __name__ == "__main__":
+    cli.run()
