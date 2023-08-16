@@ -32,12 +32,18 @@ from itertools import count
 
 ##############################################################################################################################
 
-def AuditCentroids(centroids_path):
+def AuditCentroids(centroids_path, treshold = 0.05):
 
     X = np.loadtxt(centroids_path,delimiter=",")
+    dominant = []
+    cluster = 1
+
     for c in X:
         aux = sorted(enumerate(c),reverse=True, key=lambda x:x[1])
-        print(aux)
+        faux = list(filter(lambda x: x[1] > treshold, aux))
+        print("Cluster "+str(cluster)+":" + str(faux))
+        dominant.append(faux)
+        cluster+=1
 
 def ColorNetworks(read_path,users_path,save_path):
 
