@@ -28,6 +28,7 @@ cli = Radicli()
 )
 
 def preprocessing(inputt: str = 'input/', outputt: str = 'input/'):
+    """Preprocessing of the input data: Convert the graph to edges"""
     if graph2edges(inputt,output):
         msg.good("Preprocessing Done")
 
@@ -43,6 +44,7 @@ def preprocessing(inputt: str = 'input/', outputt: str = 'input/'):
 )
 
 def precompute(inputt: str = 'input/', logss: str = 'logs/', threadss: int = 4):
+    """Precompute the graphlet counts for each node"""
     if parallelrunnerGC(inputt,logss,threads=threadss):
         msg.good("Parallel precompute done")
 
@@ -57,6 +59,7 @@ def precompute(inputt: str = 'input/', logss: str = 'logs/', threadss: int = 4):
 )
 
 def optimKE(inputt: str = 'input/', outputt: str = 'stability/'):
+    """Get the optimal number of clusters for the users caracterization (Embedding)"""
     if OptKEmbedding(inputt,outputt):
         msg.good("GAP Users Done")
 
@@ -69,6 +72,7 @@ def optimKE(inputt: str = 'input/', outputt: str = 'stability/'):
 )
 
 def stabilityE(inputt: str = 'input/', outputt: str = 'stability/', runss: int = 50, K: int = 5):
+    """Get the stability of the users caracterization (Embedding)"""
     if GetStabilityEmbedding(inputt,outputt,runs=runss,K=K):
         msg.good("Embedding Stability Done")
 
@@ -80,6 +84,7 @@ def stabilityE(inputt: str = 'input/', outputt: str = 'stability/', runss: int =
 )
 
 def embedding(inputt: str = 'input/', outputt: str = 'embeddings/', K: int = 5):
+    """Get the users caracterization (Embedding)"""
     if UsersMiniBatchKMeansEmbedding(inputt,outputt,K=K):
         msg.good("KMeans Embedding Done")       
 
@@ -94,6 +99,7 @@ def embedding(inputt: str = 'input/', outputt: str = 'embeddings/', K: int = 5):
 )
 
 def optimKC(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', outputt: str = 'clustering/'):
+    """Get the optimal number of clusters for the graph clustering"""
     if OptKClustering(inputt,outputt):
         msg.good("GAP Graphs Done")
 
@@ -106,6 +112,7 @@ def optimKC(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', output
 )
 
 def stabilityC(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', outputt: str = 'clustering/', runss: int = 50, K: int = 5):
+    """Get the stability of the graph clustering"""
     if GetStabilityClustering(inputt,outputt,runs=runss,K=K):
         msg.good("NetworkClustering Stability Done")
 
@@ -117,6 +124,7 @@ def stabilityC(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', out
 )
 
 def clustering(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', outputt: str = 'clustering/', K: int = 5):
+    """Get the graph clustering (Dendrogram)"""
     if UsersDendrogramClustering(inputt,outputt,K=K):
         msg.good("Dendrogram Done")
 
@@ -131,15 +139,18 @@ def clustering(inputt: str = 'embeddings/5-NormMiniBatchUsersEmbedding.csv', out
 )
 
 def correlations(inputt: str = 'input/', outputt: str = './'):
+    """Get the correlations between the graphlets"""
     GraphletCorrelations(inputt,outputt)
 
 @cli.command(
     "audit",
     inputt=Arg("--input", "-i", help="Input Directory"),
+    treshold=Arg("--treshold", "-t", help="Treshold"),
 )
 
-def audit(inputt: str = 'embeddings/5-CentroidsMiniBatchEmbedding.out'):
-    AuditCentroids(inputt)
+def audit(inputt: str = 'embeddings/5-CentroidsMiniBatchEmbedding.out', treshold: float = 0.05):
+    """Get the dominant graphlets for each cluster"""
+    AuditCentroids(inputt,treshold)
 
 @cli.command(
     "colornetworks",
@@ -149,6 +160,7 @@ def audit(inputt: str = 'embeddings/5-CentroidsMiniBatchEmbedding.out'):
 )
 
 def colornetworks(inputt: str = 'input/', clusterss: str = 'embeddings/5-CompleteMiniBatchUsers.csv', outputt: str = 'colored/'):
+    """Color the each node of the graph with its cluster color"""
     ColorNetworks(inputt,clusterss,outputt)
 
 @cli.command(
@@ -158,6 +170,7 @@ def colornetworks(inputt: str = 'input/', clusterss: str = 'embeddings/5-Complet
 )
 
 def viewsignature(inputt: str = 'input/', outputt: str = 'input/'):
+    """View the signature of the graph"""
     ViewSignature(inputt,outputt)
 
 @cli.command(
@@ -167,9 +180,12 @@ def viewsignature(inputt: str = 'input/', outputt: str = 'input/'):
 )
 
 def viewcomposition(inputt: str = 'embeddings/', outputt: str = 'embeddings/'):
+    """View the composition of the graph"""
     ViewComposition(inputt,outputt)
 
 ########################################################################
 
 if __name__ == "__main__":
     cli.run()
+
+########################################################################
