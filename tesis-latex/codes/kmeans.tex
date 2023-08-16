@@ -1,0 +1,24 @@
+\RestyleAlgo{ruled}
+\SetKwComment{Comment}{/* }{ */}
+
+\begin{algorithm}[hbt!]
+\caption{Pseudocódigo $KMeans$ \cite{kubat_introduction_2017}}\label{algorithms:k-means}
+\KwIn{Puntos y $K$}
+\KwOut{$K$ Grupos}
+Inicializar $K$ Centroides y $K$ Grupos\;
+Escoger un punto $X$ y calcular su distancia a cada Centroide $C_i$\;
+Definir el centroide más cercano como $C_j$\;
+\While{true}{
+    \For{Cada $X$}{
+        \If{$X$ se encuentra en $C_j$}{
+            continuar
+        }
+        \Else{
+            Mover $X$ a $C_j$ y recalcular los centroides
+        }
+    }
+    \If{los Centroides no cambien de manera significativa o se ha alcanzado un número máximo de iteraciones}{
+    false
+    }
+}
+\end{algorithm}
