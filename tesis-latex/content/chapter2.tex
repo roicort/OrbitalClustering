@@ -12,13 +12,13 @@
 %}
 %\end{lstlisting}
 
-En este capítulo se presenta el problema principal y los elementos necesarios para comprender la complejidad del mismo y una posible solución. Comenzaremos con una definición formal de un red así como su representación matemática, posteriormente se presenta el problema de agrupamiento y su relevancia dentro del aprendizaje automático. Finalmente este capítulo se enfoca en analizar la tarea de agrupamiento en una colección de redes, describiendo brevemente enfoques y limitaciones para resolver el problema. 
+En este capítulo se presenta el problema principal y algunos elementos necesarios para comprender tanto su complejidad del mismo como una posible solución. Comenzamos con una definición formal de un red  y de su representación matemática; posteriormente, se presenta el problema de agrupamiento y su relevancia dentro del aprendizaje automático. Finalmente, el capítulo se enfoca en analizar la tarea de agrupamiento en una colección de redes, describiendo brevemente enfoques y limitaciones para resolver el problema. 
 
 \section{Redes}
 
 Una red es un conjunto de nodos unidos por aristas que representan relaciones. Los nodos y aristas los podemos encontrar en distintas disciplinas con distintos nombres, por ejemplo en física se denominan sitios y vínculos y en sociología actores y vínculos. 
 
-La representación matemática de una red se denomina grafo y es estudiada en matemáticas discretas y más específicamente en teoría de grafos. Un grafo está formalmente definido como un par ordenado de conjuntos $G = (V,E)$, donde $V$ es un conjunto de nodos (vértices) y $E$ de aristas (edges) \cite{saoub_graph_2021}.
+La representación matemática de una red se denomina grafo y es estudiada en matemáticas discretas, específicamente en teoría de grafos. Un grafo está formalmente definido como un par de conjuntos $G = (V,E)$, donde $V$ es un conjunto no vacío de nodos (vértices) y $E$ es un conjunto de aristas (edges) \cite{saoub_graph_2021}.
 
  \begin{figure}[htbp]
    \centering
@@ -27,20 +27,20 @@ La representación matemática de una red se denomina grafo y es estudiada en ma
     \label{fig:graph}
 \end{figure}
 
-Un grafo dirigido o digrafo es un grafo en el que las aristas tienen direcciones. En el sentido más formal un grafo dirigido es una tripleta $G = (V,E,\phi)$ donde $\phi$ es una función de incidencia que asigna cada arista a un par ordenado de nodos, es decir, $ \phi :E \to \{(x,y)\mid (x,y)\in V^{2}\ \mbox{ y } x \neq y \}$
+Un grafo dirigido, o digrafo, es un grafo en el que las aristas tienen direcciones. En un sentido más formal, un grafo dirigido es una tripleta $G = (V,E,\phi)$ donde $\phi$ es una función de incidencia que asigna cada arista a un par ordenado de nodos, es decir, $ \phi :E \to \{(x,y)\mid (x,y)\in V^{2}\ \mbox{ y } x \neq y \}$
 
  \begin{figure}[htbp]
    \centering
    \includesvg[width=0.25\textwidth]{figures/digraph.svg}
-    \caption{Grafo Dirigido (\textit{DiGraph}). Podemos observar que la dirección de las aristas esta representada por una flecha que indica en donde se origina la arista (inicio de la flecha) 
-    .}
+    \caption{Grafo Dirigido (\textit{DiGraph}). Podemos observar que la dirección de las aristas esta representada por una flecha que indica en donde se origina la arista (inicio de la flecha) .}
     \label{fig:digraph}
 \end{figure}
 
-Un subgrafo $H$ de un grafo $G$ es otro grafo formado a partir de un subconjunto de nodos y un subconjunto de aristas de $G$. El subconjunto de nodos debe incluir todos los extremos del subconjunto de aristas, pero también puede incluir otros nodos. Un subgrafo inducido $H$ de un grafo $G$ es aquel que incluye todas las aristas del grafo $G$ cuyos puntos extremos pertenecen al subconjunto de nodos que define al subgrafo $H$.
+Un subgrafo $H$ de un grafo $G$ es un grafo formado a partir de un subconjunto de nodos y un subconjunto de aristas de $G$. El subconjunto de nodos debe incluir todos los extremos del subconjunto de aristas, pero también puede incluir otros nodos. Un subgrafo inducido $H$ de un grafo $G$ es aquel que incluye todas las aristas del grafo $G$ cuyos puntos extremos pertenecen al subconjunto de nodos que define al subgrafo $H$.
 
 Un isomorfismo de grafos es una biyección de los nodos de un grafo sobre otro, de modo que se preserva la adyacencia de los nodos. Formalmente, el isomorfismo entre dos grafos $G$ y $H$ es una función biyectiva  $f:V(G) \rightarrow V(H)$. Esta definición se extiende a las gráficas dirigidas si la función preserva el orden entre cada par de nodos asociados con una arista. 
-Una simetría es un isomorfismo de una gráfica (dirigida o no) sobre sí misma.
+
+Una simetría es un isomorfismo de una gráfica sobre sí misma.
 
 Determinar si dos grafos con el mismo número de vértices $n$ y aristas $m$ son isomorfos o no, se conoce como el problema del isomorfismo de grafos. Este es un problema NP y se cree que es NP-Completo, aunque no está demostrado \cite{kobler_graph_1993}.
 
@@ -60,56 +60,61 @@ Determinar si dos grafos con el mismo número de vértices $n$ y aristas $m$ son
 \section{Aprendizaje automático}
 \label{sec:ML}
 
-El aprendizaje automático o aprendizaje de máquina, del inglés \textit{Machine Learning} (ML), es una rama de la Inteligencia Artificial (IA) que estudia algoritmos y técnicas que permiten automatizar soluciones a problemas complejos. Esto, a partir del aprendizaje sobre conjuntos de datos en vez de los métodos convencionales de programación. 
+El aprendizaje automático o aprendizaje de máquina, del inglés \textit{Machine Learning} (ML), es una rama de la Inteligencia Artificial (IA) que estudia algoritmos y técnicas que permiten automatizar soluciones a problemas complejos. Esto se logra a partir del aprendizaje sobre conjuntos de datos. 
 
-Como un subconjutnto de la disciplina de la Inteligencia Ariticial, que es un campo de estudio amplio y diverso que estudia distintas técnicas para crear algoritmos inteligentes, el aprendizaje automático se enfoca principalmente en imitar el aprendizaje humano y gradualmente mejorar la precisión sobre una tarea \cite{ibm_what_nodate}. Comúnmente, bajos ciertos requerimientos se diseña un algoritmo que sigue una serie de pasos para resolver un problema, no obstante en problemas complejos a pesar de tener requerimientos claros y específicos este enfoque puede resultar complicado para crear y programar grandes conjuntos de reglas. Un ejemplo claro podría ser la tarea de detectar objetos en una imagen \cite{rebala_introduction_2019}.
+Como subconjutnto de IA, un campo de estudio amplio y diverso que estudia distintas técnicas para crear algoritmos inteligentes, el aprendizaje automático se enfoca principalmente en imitar el aprendizaje humano y gradualmente mejorar la precisión sobre una tarea \cite{ibm_what_nodate}. En problemas complejos, a pesar de tener requerimientos claros y específicos, puede resultar complicado crear y programar conjuntos de reglas explícitas que representen una solución. Un ejemplo claro podría ser la tarea de detectar objetos en una imagen \cite{rebala_introduction_2019}.
 
-Los algoritmos de aprendizaje automático son capaces de resolver problemas de manera implícita aprendiendo estructuras y reglas a partir de un conjunto de datos en vez de tener una estructura y diseño explícito. No obstante, debido a la naturaleza de estos algoritmos, dependen directamente de la calidad y cantidad de ejemplos en el conjunto de datos. Dependiendo de la naturaleza del conjunto de datos encontraremos también distintas categorías de algoritmos dentro del aprendizaje automático \cite{rebala_introduction_2019}, siendo principalmente los conjuntos de datos etiquetas y no etiquetados.
+Los algoritmos de aprendizaje automático son capaces de resolver problemas de manera {\it implícita}, aprendiendo estructuras y reglas a partir de un conjunto de datos en vez de tener una estructura y diseño explícito.  La naturaleza de estos algoritmos hace que dependan directamente de la calidad y cantidad de ejemplos en el conjunto de datos. Dependiendo de la naturaleza de la tarea planteada en el conjunto de datos, encontraremos distintas categorías de algoritmos dentro del aprendizaje automático \cite{rebala_introduction_2019}. Principalmente, se establece una distinción entre los conjuntos de datos etiquetas y no etiquetados.
 
-Un conjunto de datos etiquetado es aquel cuyos ejemplos tienen la respuesta a la pregunta que se hace. Podemos pensar al conjunto de datos etiquetado como una guía de estudio, a partir de la cual el estudiante (en este caso la máquina) puede aprender a partir de ejemplos. Un ejemplo es el caso de la tarea de clasificación, para la cual el conjunto de datos contiene información sobre la clase a la que representa cada objeto, por ejemplo, una imagen de un perro contiene la etiqueta perro. Por otro lado los datos no etiquetados (crudos) son aquellos que no contienen una etiqueta, es decir que no ha sido preprocesados de ninguna manera y de los cuales no poseemos más información que el dato en sí. Los datos no etiquetados son aquellos que podemos recolectar de un sensor a partir de observaciones de algún entorno.
+Un conjunto de datos etiquetado es aquel cuyos ejemplos tienen la respuesta a la pregunta que se hace. Podemos pensar al conjunto de datos etiquetado como una guía de estudio, a partir de la cual el estudiante (en este caso la máquina) puede aprender de ejemplos. En el caso de la tarea de clasificación, el conjunto de datos contiene información sobre la clase representada por cada objeto; por ejemplo, una imagen de un perro contiene la etiqueta perro. 
+
+Por otro lado, los datos no etiquetados son aquellos que no contienen una etiqueta, es decir que no han sido catalogados de ninguna manera y de los cuales no poseemos más información que el dato en sí. Los datos no etiquetados son, por ejemplo, aquellos que podemos recolectar de un sensor a partir de observaciones de algún entorno.
 
 \subsection{Aprendizaje automático supervisado}
-
-El objetivo del aprendizaje supervisado es crear un modelo sobre un conjunto de datos etiquetados para posteriormente poder predecir las etiquetas de datos nuevos a partir del aprendizaje de la relación entre las características y la variable objetivo \cite{rebala_introduction_2019}. En otras palabras, estos algoritmos resuelven problemas es a partir de un modelo generado aprendiendo (con un entrenamiento) sobre un conjunto de datos con etiquetas conocidas (ejemplos) que después se ejecuta sobre nuevos datos para predecir su etiqueta. 
+El objetivo del aprendizaje supervisado es crear un modelo sobre un conjunto de datos etiquetados para posteriormente predecir las etiquetas de datos nuevos a partir del aprendizaje de la relación entre las características y la variable objetivo \cite{rebala_introduction_2019}. En otras palabras, estos algoritmos resuelven problemas a partir de generar un modelo que aprende sobre un conjunto de datos con etiquetas conocidas (datos de entrenamiento) y que después se ejecuta sobre nuevos datos para predecir su etiqueta. 
 
 Durante la fase de entrenamiento, el modelo ajusta sus parámetros para minimizar la diferencia entre las predicciones y los valores reales de la variable objetivo en el conjunto de datos de entrenamiento. Para lograr esto, el conjunto de datos etiquetados es dividido, una parte del conjunto se utiliza para que el algoritmo aprenda (como una guía con ejemplos) y a la vez otra parte más pequeña es utilizada para poner a prueba el entrenamiento (como un examen). Una vez que el modelo ha sido entrenado y se ha ajustado a los datos, este es capaz de etiquetar datos nuevos que no se habían visto previamente durante el entrenamiento. 
 
-Este tipo de algoritmos tienden a ser efectivos, en parte porque pueden considerar mas atributos sobre un ejemplo y pueden procesar una cantidad superior de datos. No obstante, una consideración importante es que no siempre es clara la manera en la que el problema esta siendo resuelto y por lo tanto es complicado interpretar el modelo \cite{rebala_introduction_2019}. 
+Este tipo de algoritmos tienden a ser muy efectivos. No obstante, una consideración importante es que no siempre es clara la manera en la que el problema esta siendo resuelto y por lo tanto es complicado interpretar el modelo \cite{rebala_introduction_2019}. 
 
-Si bien se sabe qué entradas se deben proporcionar y qué salidas se deben esperar, no es sencillo comprender como el modelo llega a esas salidas; a este problema se le conoce como el problema de interpretabilidad de un modelo \cite{zhang_survey_2021, rebala_introduction_2019}. La interpretabilidad es un problema especialmente presente cuando se usa un enfoque de redes neuronales \cite{zhang_survey_2021}, que tienen millones de parámetros vuelven complicado interpretar las decisiones o la serie de reglas que llevan a cabo para resolver un problema. Lo modelos modernos tienen muchas capas y conexiones que pueden procesar grandes cantidades de datos en dónde puede que se aprenden patrones muy sutiles que son difíciles de detectar por los humanos. Otro factor que dificulta la interpretación de los modelos de aprendizaje automático es que algunos de ellos utilizan técnicas de optimización que no están diseñadas para ser fácilmente interpretables.
+Aunque se sabe qué entradas se deben proporcionar y qué salidas se deben esperar, no es sencillo comprender cómo el modelo llega a esas salidas; a este problema se le conoce como el problema de interpretabilidad de un modelo \cite{zhang_survey_2021, rebala_introduction_2019}. 
 
-Esto puede ser un problema en algunas aplicaciones de estos modelos donde se necesita transparencia e interpretabilidad en las decisiones tomadas. Un ejemplo podría ser el área médica, en donde es necesario que los algoritmos que asisten diagnósticos sean auditables y pueda revisarse bajo criterios se realizó un diagnóstico.
+La interpretabilidad es un problema especialmente presente cuando se usa un enfoque de redes neuronales \cite{zhang_survey_2021}, que tienen millones de parámetros y vuelven complicado interpretar las decisiones o la serie de reglas que construyen para resolver un problema. Lo modelos recientes tienen una cantidad creciente de capas y conexiones que pueden procesar grandes cantidades de datos, y pueden aprender patrones muy sutiles que son difíciles de detectar por los humanos. 
+
+La interpretabilidad puede ser un problema en algunas aplicaciones en donde es necesaria la transparencia. Un ejemplo podría ser el área médica, en donde es deseable que los algoritmos que asisten diagnósticos sean auditables y permitan revisar bajo qué criterios se realizó un diagnóstico.
 
 \subsection{Aprendizaje automático no supervisado}
 
-En el aprendizaje no supervisado el objetivo principal es aprender patrones a partir de conjuntos de datos no etiquetados. Dentro del aprendizaje automático no supervisado existen tareas como la identificación de patrones frecuentes, creación reglas de asociación y búsqueda de agrupamientos \cite{kubat_introduction_2017}. En esta sección nos enfocaremos en la tarea de agrupar, que es quizá la tarea más representativa del aprendizaje no supervisado. 
+En el aprendizaje no supervisado el objetivo principal es aprender patrones a partir de conjuntos de datos no etiquetados. Dentro del aprendizaje automático no supervisado existen tareas como la identificación de patrones frecuentes, creación de reglas de asociación y búsqueda de agrupamientos \cite{kubat_introduction_2017}. En esta sección nos enfocaremos en la tarea de agrupar, que es quizá la tarea más representativa del aprendizaje no supervisado. 
 
-Llevar a cabo una tarea de agrupamiento, o \textit{clustering}, consiste en dividir un gran conjunto de datos (puntos) de tal manera en que los puntos con propiedades o patrones en común se encuentren en un mismo grupo. La complejidad de esta tarea radica en que los grupos no se conocen previamente y la cantidad de los mismos es desconocida. Posteriormente, los resultados de esta tarea pueden ser utilizados como clasificadores o predictores de valores de atributos desconocidos, e incluso como herramientas de visualización \cite{kubat_introduction_2017}.
+Llevar a cabo una tarea de agrupamiento, o \textit{clustering}, consiste en dividir un gran conjunto de datos (puntos) de tal manera que los puntos con propiedades o patrones en común se encuentren en un mismo grupo. La complejidad de esta tarea radica en que los grupos no se conocen previamente y la cantidad de los mismos es desconocida. 
+
+Los resultados de un agrupamiento pueden ser utilizados como clasificadores o predictores de valores de atributos desconocidos, e incluso como herramientas de visualización \cite{kubat_introduction_2017}.
 
  \begin{figure}[htbp]
    \centering
    \includesvg[width=0.6\textwidth]{figures/cluster-example.svg}
-    \caption{Un ejemplo de agrupamiento (\texit{clustering}) en $R^2$}
+    \caption{Un ejemplo de agrupamiento (\texit{clustering}) en $R^2$.}
     \label{fig:clustering-example}
 \end{figure}
 
-Un ejemplo sencillo de agrupamiento en $R^2$ puede ser el que se muestra en la Fig. \ref{fig:clustering-example}. Aquí cada punto representa un ejemplo descrito por dos atributos. En este caso es sencillo encontrar los agrupamientos a simple vista, sin embargo para cuatro dimensiones o más, no es posible para los humanos visualizar los datos ni los grupos; estos casos solo pueden ser resueltos por los algoritmos de agrupamiento \cite{kubat_introduction_2017}.
+Un ejemplo sencillo de agrupamiento en $R^2$ puede ser el que se muestra en la Fig. \ref{fig:clustering-example}, en el que cada punto representa un ejemplo descrito por dos atributos. Aunque en este caso es sencillo encontrar los agrupamientos a simple vista, para cuatro dimensiones o más no es posible visualizar los datos ni los grupos. A medida que los datos tienen mayor complejidad, establecer grupos sólo puede lograrse mediante algoritmos diseñados para la tarea \cite{kubat_introduction_2017}.
 
-Los algoritmos de agrupamiento frecuentemente requieren definir una función de distancia entre un ejemplo y todos los elementos del grupo. Dependiendo de la naturaleza de los atributos, distintas medidas pueden ser propuestas. 
+Los algoritmos de agrupamiento frecuentemente requieren definir una función de distancia entre un ejemplo y todos los elementos del grupo. Dependiendo de la naturaleza de los atributos, distintas medidas pueden ser convenientes. 
 
-Cuando se trata de puntos numéricos en el espacio comúnmente se utiliza la distancia Minkowski. Consideremos $X = (x_1,x_2,\ldots,x_n)$ y $Y=(y_1,y_2,\ldots ,y_n) \in R^n$, la distancia Minkowski de orden $p$, con $p$ un número entero, se define como 
+Una elección común es la distancia Minkowski. Consideremos $X = (x_1,x_2,\ldots,x_n)$ y $Y=(y_1,y_2,\ldots ,y_n) \in R^n$, la distancia Minkowski de orden $p$, con $p$ un número entero, se define como 
 $$D(X,Y) = (\sum_{i=1}^{n}|x_{i}-y_{i}|^{p})^{\frac{1}{p}}.$$
 
-Uno de los algoritmos más conocidos de agrupamiento es \textit{K-Means}. Este algoritmo agrupa los datos de entrada en $K$ grupos para una $K$ predefinida por el usuario. La representación matemática de los $K$ grupos se conoce como centroide, que es el punto promedio de la distancia a cada punto del grupo que representa. En cierto sentido, cada grupo está representado por su centroide, pues los elementos del centroide representan el valor promedio de todos los elementos del grupo y, de esta forma, los caracteriza.
+Uno de los algoritmos más conocidos de agrupamiento es \textit{KMeans}. Este algoritmo agrupa los datos de entrada en $K$ grupos, para una $K$ predefinida por el usuario. La representación matemática de cada uno de los $K$ grupos es un centroide, que es el punto promedio de la distancia entre los puntos del grupo que representa. Por ser el valor promedio de todos los elementos del grupo, un centroide permite una caracterización adecuada del grupo. 
 
  \begin{figure}[htbp]
    \centering
    \includesvg[width=1\textwidth]{figures/centroids-example.svg}
-    \caption{Centroides}
+    \caption{Centroides.}
     \label{fig:centroides}
 \end{figure}
 
-El algoritmo \textit{K-Means} busca minimizar la distancia promedio de cada centroide a los puntos de su grupo. De manera formal, dado un conjunto de ejemplos $(x_1, x_2, ..., x_n)$ donde cada ejemplo es un vector $d-dimensional$, \textit{K-Means} busca agrupar los $n$ ejemplos en $K(<=n)$ grupos $S = {S_1, S_2, ..., S_k}$ de tal manera que se minimice el error cuadrático total entre los ejemplos de entrenamiento y sus centroides correspondientes. Es decir, se busca resolver el problema 
+El algoritmo \textit{KMeans} busca minimizar la distancia promedio de cada punto al centroide del grupo al que fue asignado. De manera formal, dado un conjunto de ejemplos $(x_1, x_2, ..., x_n)$ donde cada ejemplo es un vector $d-dimensional$, \textit{KMeans} busca agrupar los $n$ ejemplos en $K(<=n)$ grupos $S = {S_1, S_2, ..., S_k}$ de tal manera que se minimice el error cuadrático total entre los ejemplos de entrenamiento y sus centroides correspondientes. Es decir, se busca resolver el problema 
 
 \begin{align} \label{eq:kMeans}
 \displaystyle {\underset {\mathbf {S} }{\operatorname {arg\,min} }}\sum _{i=1}^{k}\sum _{\mathbf {x} \in S_{i}}\left\|\mathbf {x} -{\boldsymbol {\mu }}_{i}\right\|^{2},
@@ -118,14 +123,14 @@ en donde $\mu_i$ representa el centroide del grupo $S_i$.
 
 La función objetivo en la expresión anterior se conoce como \textit{inertia} o \textit{within-cluster sum-of-squares criterion}.
 
-El problema \ref{eq:kMeans} puede resolverse de manera iterativa, siguiendo el Algoritmo \ref{algorithms:k-means}. En este enfoque, los centroides pueden ser inicializados de manera aleatoria o con algunas técnicas de inicialización que permitan al algoritmo converger más rápido. Posterioremente, el algoritmo itera recalculando los centroides y los puntos correspondientes a cada grupo, hasta que ya no haya un cambio significativo o se alcance el número máximo de iteraciones. 
+El problema \ref{eq:kMeans} puede resolverse de manera iterativa, siguiendo el Algoritmo \ref{algorithms:k-means}. En este enfoque, los centroides pueden ser inicializados de manera aleatoria o con algunas técnicas de inicialización que permitan al algoritmo converger más rápido. Posterioremente, el algoritmo itera recalculando los centroides y los puntos correspondientes a cada grupo, hasta que ya no haya un cambio significativo en la función objetivo o se alcance el número máximo de iteraciones. 
 
-Uno de los aspectos negativos de este algoritmo es que es muy susceptible a los centroides iniciales. Generalmente se ejecuta el algoritmo varias veces y se considera el mejor resultado, en términos de la función objetivo, como el agrupamiento final.
+Uno de los aspectos negativos de este algoritmo es que es muy susceptible a los centroides iniciales. En la práctica, es común ejecutar el algoritmo varias veces y considerar al mejor resultado, en términos de la función objetivo, como el agrupamiento final.
 
 \include{codes/kmeans}\label{algorithms:k-means}
 
 \section{Agrupamientos en grafos}
-Algoritmos de agrupamiento como K-Means, diseñados para trabajar en conjuntos de vectores, no pueden ser utilizados directamente en grafos. Sin embargo, las numerosas aplicaciones y la necesidad en diferentes contextos de identificar grupos en datos estructurados han derivado en la propuesta de numerosos algoritmos para hacer agrupamientos en grafos.
+Algoritmos de agrupamiento como KMeans, diseñados para trabajar en conjuntos de vectores, no pueden ser utilizados directamente en grafos. Sin embargo, las numerosas aplicaciones y la necesidad en diferentes contextos de identificar grupos en datos estructurados han derivado en la propuesta de numerosos algoritmos para hacer agrupamientos en grafos.
 
 Conviene señalar que al hablar de agrupamiento en grafos se abarcan dos tareas distintas. La primera consiste en la detección de comunidades, o grupos de nodos, dentro de un solo grafo. La segunda, significativamente menos explorada en la literatura, consiste en realizar agrupamientos a nivel grafo, es decir, identificar grupos de grafos con características en común dentro de una colección.  
 
@@ -146,12 +151,14 @@ La partición de grafos es un problema estudiado desde 1960 \cite{newman_network
 Por otro lado, la detección de comunidades busca grupos que ocurren naturalmente en la estructura de una red, independientemente de la cantidad de grupos y el número de nodos en ellos. Esta tarea nos permite estudiar la estructura y organización de una red. 
 
 \subsection{Agrupamientos de grafos}
-Encontrar grupos dentro de una colección de grafos es un problema menos estudiado que el agrupamiento de nodos y, por lo tanto, representa un reto más grande. Comparar redes que podrían tener diferente tamaño y orden requiere basarse en propiedades estructurales. Este es un problema con aplicaciones de importancia, pero computacionalmente costoso. 
+Encontrar grupos dentro de una colección de grafos es un problema menos estudiado que el agrupamiento de nodos. 
+
+Comparar redes que podrían tener diferente tamaño y orden requiere basarse en propiedades estructurales. Este es un problema con aplicaciones de importancia, pero que puede ser computacionalmente costoso. 
 
  \begin{figure}[htbp]
    \centering
    \includesvg[width=0.75\textwidth]{figures/netcluster.svg}
-    \caption{Dos agrupamientos de distintas redes de acuerdo a sus propiedades estructurales. En el primer grupo podemos observar egonetworks y en el segundo redes más complejas. }
+    \caption{Dos agrupamientos de distintas redes de acuerdo a sus propiedades estructurales. En el primer grupo podemos observar {\it egonetworks}; en el segundo se muestran redes más complejas.}
     \label{fig:netcluster}
 \end{figure}
 
@@ -161,7 +168,7 @@ Entre las aproximaciones populares para comparar dos grafos podemos encontrar el
 
 %Idealmente el Isomorfismo de Grafo sería la aproximación más adecuada, no obstante como vimos en \ref{subsection:isomorphism} se trata de un problema NP y por lo tanto existen limitaciones mas que considerables en la práctica.
 
-\paragraph{Medidas estructurales.} Es posible establecer una comparación entre dos grafos basada en propiedades de los mismos. Por ejemplo, el trabajo \textit{"Classifying Twitter Topic-Networks Using Social Network Analysis"} \cite{himelboim_classifying_2017}, relacionado muy de cerca a nuestra propuesta en cuanto a objetivo, utiliza las medidas de centralidad, centralización, densidad, modularidad y fracción de \textit{clusters} e \textit{Isolates} para establecer categorías de redes dentro de una colección, agrupando así conforme a características estructurales. Desafortunadamente este enfoque puede ser muy limitado, y, dependiendo de los indicadores considerados y del contexto del problema, podría no capturar con suficiente detalle la estructura de las redes que se están comparando. 
+\paragraph{Medidas estructurales.} Es posible establecer una comparación entre dos grafos basada en propiedades de los mismos. Por ejemplo, el trabajo \textit{"Classifying Twitter Topic-Networks Using Social Network Analysis"} \cite{himelboim_classifying_2017}, relacionado muy de cerca a nuestra propuesta en cuanto a objetivo, utiliza las medidas de centralidad, centralización, densidad, modularidad y fracción de \textit{clusters} e \textit{Isolates} para establecer categorías de redes dentro de una colección, agrupando así conforme a características estructurales. Desafortunadamente este enfoque puede ser limitado en cuanto a la distinción que establece entre redes. Dependiendo de los indicadores considerados y del contexto del problema, el enfoque podría no capturar con suficiente detalle la estructura de las redes que se están comparando. 
 
 \paragraph{Distancia de Edición (\textit{Graph Edit Distance}, GED).} Esta es una de las alternativas más conocidas para comparar dos grafos. La GED mide el número de cambios (inserciones y remociones de nodos y/o aristas) necesarios para llegar a la estructura del grafo $B$ partiendo desde el grafo $A$. 
 

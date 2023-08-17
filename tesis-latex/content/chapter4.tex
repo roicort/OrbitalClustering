@@ -5,7 +5,7 @@
 
 %\cleanchapterquote{Innovation distinguishes between a leader and a follower.}{Steve Jobs}{(CEO Apple Inc.)}
 
-El agrupamiento de una colección de grafos no es un problema sencillo. El uso de algoritmos de agrupación populares, como K-Means, requiere representar los grafos en un espacio vectorial. Esta tarea puede llevarse a cabo mediante métodos que van desde la extracción de características hasta \textit{embeddings} más sofisticados, generados a través de redes neuronales. 
+El agrupamiento de una colección de grafos no es un problema sencillo. El uso de algoritmos de agrupación populares, como KMeans, requiere representar los grafos en un espacio vectorial. Esta tarea puede llevarse a cabo mediante métodos que van desde la extracción de características hasta \textit{embeddings} más sofisticados, generados a través de redes neuronales. 
 
 Priorizando la interpretación de los resultados, proponemos usar el conteo de órbitas en \textit{graphlets} dirigidos para hacer una caracterización de los usuarios en la colección analizada y crear un \textit{embedding} de las redes que brinde información sobre el tipo de comportamiento que genera un determinado tema. 
 
@@ -47,18 +47,18 @@ Las redes temáticas de Twitter son redes con aristas dirigidas. En el estudio p
 %[PÁRRAFO QUE TERMINA HABLANDO SOBRE EL VOLUMEN QUE SE ESPERA, Y POR QUÉ SERÍA NECESARIO UTILIZAR UNA VARIANTE MÁS EFICIENTE DE K-MEANS (MOTIVAR LA SIGUIENTE SUBSECCIÓN)]
 
 Identificar los distintos perfiles a partir de la matriz $M$ requiere una tarea de agrupamiento. 
-Aunque K-Means (Algoritmo \ref{algorithms:k-means}) es conveniente por motivos como la interpretabilidad, el volumen de datos en nuestro problema demanda un método más eficiente, considerando que se desea analizar la representación vectorial de todos los usuarios en todas las redes en la colección. Por esta razón, proponemos el uso de MiniBatch K-Means \cite{sculley_web-scale_2010}, que es una de las distintas modificaciones de K-Means propuestas para lidiar con limitaciones de tiempo y memoria. El algoritmo se describe a continuación. 
+Aunque KMeans (Algoritmo \ref{algorithms:k-means}) es conveniente por motivos como la interpretabilidad, el volumen de datos en nuestro problema demanda un método más eficiente, considerando que se desea analizar la representación vectorial de todos los usuarios en todas las redes en la colección. Por esta razón, proponemos el uso de MiniBatch KMeans \cite{sculley_web-scale_2010}, que es una de las distintas modificaciones de KMeans propuestas para lidiar con limitaciones de tiempo y memoria. El algoritmo se describe a continuación. 
 
-\subsection{MiniBatch K-Means}
-A pesar de la enorme popularidad de K-Means por su simplicidad y buen desempeño, el algoritmo se ve limitado frente a la cada vez más grande cantidad de datos a analizar. Esto se debe a restricciones como tener que mantener todo el conjunto de datos en memoria. 
+\subsection{MiniBatch KMeans}
+A pesar de la enorme popularidad de KMeans por su simplicidad y buen desempeño, el algoritmo se ve limitado frente a la cada vez más grande cantidad de datos a analizar. Esto se debe a restricciones como tener que mantener todo el conjunto de datos en memoria. 
 
-MiniBatch K-Means \cite{sculley_web-scale_2010} es una versión modificada de K-Means que busca reducir la complejidad computacional del algoritmo original utilizando únicamente una fracción del conjunto de datos en cada iteración. Esta estrategia reduce el número de cálculos de distancias por iteración y por lo tanto la complejidad total, pero con un costo asociado de un agrupamiento de menor calidad \cite{bejar_k-means_nodate}.
+MiniBatch KMeans \cite{sculley_web-scale_2010} es una versión modificada de KMeans que busca reducir la complejidad computacional del algoritmo original utilizando únicamente una fracción del conjunto de datos en cada iteración. Esta estrategia reduce el número de cálculos de distancias por iteración y por lo tanto la complejidad total, pero con un costo asociado de un agrupamiento de menor calidad \cite{bejar_k-means_nodate}.
 
-La idea principal de MiniBatch K-Means es utilizar pequeños lotes (mini batches) aleatorios de un tamaño fijo del conjunto de datos para poder almacenarlos en la memoria. En cada iteración se obtiene una nueva muestra aleatoria del conjunto de datos y se utiliza para actualizar los grupos (clusters) hasta la convergencia. 
+La idea principal de MiniBatch KMeans es utilizar pequeños lotes (mini batches) aleatorios de un tamaño fijo del conjunto de datos para poder almacenarlos en la memoria. En cada iteración se obtiene una nueva muestra aleatoria del conjunto de datos y se utiliza para actualizar los grupos (clusters) hasta la convergencia. 
 
-MiniBatch K-Means hace uso de una tasa de aprendizaje que disminuye con el número de iteraciones. La tasa de aprendizaje es inversa del número de ejemplos asignados a un grupo durante el proceso y por lo tanto a medida que aumenta el número de iteraciones se reduce el efecto de nuevos ejemplos. La convergencia del algoritmo se puede detectar cuando no se producen más cambios en los grupos durante un número definido de iteraciones continuas. 
+MiniBatch KMeans hace uso de una tasa de aprendizaje que disminuye con el número de iteraciones. La tasa de aprendizaje es inversa del número de ejemplos asignados a un grupo durante el proceso y por lo tanto a medida que aumenta el número de iteraciones se reduce el efecto de nuevos ejemplos. La convergencia del algoritmo se puede detectar cuando no se producen más cambios en los grupos durante un número definido de iteraciones continuas. 
 
-El Algoritmo \ref{algorithms:minik-means} muestra el pseudocódigo de MiniBatch K-Means y sus particularidades, entre ellas el muestreo $M$ de ejemplos aleatorios y el cálculo de la función objetivo (distorsión).
+El Algoritmo \ref{algorithms:minik-means} muestra el pseudocódigo de MiniBatch KMeans y sus particularidades, entre ellas el muestreo $M$ de ejemplos aleatorios y el cálculo de la función objetivo (distorsión).
 
 \include{codes/minikmeans}\label{algorithms:minik-means}
 
