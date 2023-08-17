@@ -1,0 +1,21 @@
+---
+sidebar_position: 0
+---
+
+# Graphlets
+
+Los graphlets son subgrafos que pueden identificarse de manera inducida en una red mas grande. En teoría de grafos, un subgrafo inducido de un grafo G se conforma a partir de un subconjunto de vértices de G y de todas las aristas incidentes a pares de vértices del subconjunto [Prz07].
+
+Los graphlets fueron introducidos por primera vez dentro del contexto biológico con la idea de comparar grafos. Milenkovic et al. crearon un diccionario de todos los posibles subgrafos con 2-5 nodos considerando las clases de isomorfismo [MP08].
+
+A partir de ese trabajo, se ha utilizado la ennumeración de graphlets de tamaño n para estudiar la estructura de redes. Es decir, dada una red G, se observa el subgrafo que se forma en cada posible combinación de n nodos conexos dentro de G y se realiza un conteo de las estructuras observadas.
+
+Así, podemos pensar en los graphlets como una colección o diccionario de todas las clases de isomorfismo de subgrafos de hasta un tamaño fijo n. La Fig. 3.1 muestra los graphlets correspondientes a n = 2, n = 3 y n = 4. Analizar una red usando graphlets de tamaño máximo n = 4 consistiría en identificar cada una de las estructuras que se muestran en la figura y contar cuántas veces aparece cada una. Este conteo después puede utilizarse para analizar propiedades de la red, de la misma manera en que se utiliza el grado. De hecho, el perfil que tiene una red respecto al conteo de graphlets puede considerarse una generalización de la distribución de grado [Sar+16].
+
+<figure style={{'text-align': 'center'}}>
+  <img src="https://raw.githubusercontent.com/roicort/OrbitalClustering/main/tesis-latex/figures/smallgraphlets.svg" alt="Orbita 1" style={{width: '100%'}}></img>
+  <figcaption>Fig. 3.1</figcaption>
+</figure>
+
+La relevancia de los graphlets va más allá de la comparación de grafos. Recien- temente se ha sugerido que la presencia, o ausencia, de ciertas estructuras locales dentro de una red podría tener un impacto crítico en la estructura general de la red [Lus].
+
