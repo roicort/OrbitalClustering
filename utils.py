@@ -213,5 +213,5 @@ def ViewComposition(read_path,save_path):
         fig.update_layout(legend_title="Perfil")
 
         # Save plot
-
         fig.write_image(save_path+name+"-composicion.svg")
+        msg.info("Saved in "+save_path+name+"-composicion.svg")

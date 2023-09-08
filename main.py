@@ -29,7 +29,7 @@ cli = Radicli()
 
 def preprocessing(inputt: str = 'input/', outputt: str = 'input/'):
     """Preprocessing of the input data: Convert the graph to edges"""
-    if graph2edges(inputt,output):
+    if graph2edges(inputt,outputt):
         msg.good("Preprocessing Done")
 
 ########################################################################
