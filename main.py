@@ -145,12 +145,12 @@ def correlations(inputt: str = 'input/', outputt: str = './'):
 @cli.command(
     "audit",
     inputt=Arg("--input", "-i", help="Input Directory"),
-    treshold=Arg("--treshold", "-t", help="Treshold"),
+    threshold=Arg("--threshold", "-t", help="threshold"),
 )
 
-def audit(inputt: str = 'embeddings/5-CentroidsMiniBatchEmbedding.out', treshold: float = 0.05):
+def audit(inputt: str = 'embeddings/5-CentroidsMiniBatchEmbedding.out', threshold: float = 0.05):
     """Get the dominant graphlets for each cluster"""
-    AuditCentroids(inputt,treshold)
+    AuditCentroids(inputt,threshold)
 
 @cli.command(
     "colornetworks",
