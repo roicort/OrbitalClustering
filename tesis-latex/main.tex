@@ -68,10 +68,15 @@
 \pagenumbering{roman}			% roman page numbing (invisible for empty page style)
 \pagestyle{empty}				% no header or footers
 \input{content/unamcover}		% INCLUDE: all titlepages
+\input{content/empastado}
 \input{content/maincover}		% INCLUDE: all titlepages
 \cleardoublepage
 
-\pagestyle{plain}				% display just page numbers
+\pagestyle{plain}
+\input{content/acknowledgement-inst} 
+\cleardoublepage
+\input{content/acknowledgement-per} 
+\cleardoublepage                % display just page numbers
 \input{content/abstract-es}		% INCLUDE: the abstract
 \clearpage
 \input{content/abstract-fr}
@@ -79,10 +84,7 @@
 \input{content/abstract-en}
 \clearpage
 %
-\input{content/acknowledgement-inst} 
-\cleardoublepage
-\input{content/acknowledgement-per} 
-\cleardoublepage
+
 %
 \currentpdfbookmark{\contentsname}{toc}
 \setcounter{tocdepth}{3}		% define depth of toc --> 3 

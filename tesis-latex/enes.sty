@@ -263,12 +263,26 @@ keepaspectratio]{images/contraportada.pdf}%
 \vfill
 }}}
 
+\newcommand\EMPASTADOBackgroundCover{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight,%
+keepaspectratio]{images/empastado.pdf}%
+\vfill
+}}}
+
 \newcommand\MAINCover{%
 	\AddToShipoutPicture*{\MAINBackgroundCover}
 }
 
 \newcommand\UNAMCover{%
 	\AddToShipoutPicture*{\UNAMBackgroundCover}
+}
+
+\newcommand\EMPASTADOCover{%
+	\AddToShipoutPicture*{\EMPASTADOBackgroundCover}
 }
 
 \newcommand\ThesisSeparator{%

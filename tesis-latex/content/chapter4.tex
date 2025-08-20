@@ -29,7 +29,7 @@ Como se ilustró en la sección \ref{section:nodeclustering}, es posible realiza
  
 En las redes sociales, y específicamente en Twitter, las funciones y las interacciones que realiza un nodo dentro de una red inciden directamente en la composición y topología de la misma. Estudiar roles estructurales permite caracterizar nodos de acuerdo a su función, obtener información sobre los tipos de comportamiento de los usuarios y estudiar la composición de la red.
 
-De hecho, diferentes trabajos en ciencias sociales se centran en los patrones de asociación en una red para entender los procesos dentro de un sistema. Por ejemplo, Lusher y Robins sugieren la presencia de configuraciones a lo largo de las líneas de ''huellas arqueológicas" impresas en los mecanismos sociales a través del tiempo y ejemplifican su idea sugiriendo los arreglos mostrados en la Fig. \ref{fig:lusher}.
+De hecho, diferentes trabajos en ciencias sociales se centran en los patrones de asociación en una red para entender los procesos dentro de un sistema. Por ejemplo, Lusher y Robins sugieren la presencia de configuraciones a lo largo de las líneas de \enquote{huellas arqueológicas} impresas en los mecanismos sociales a través del tiempo y ejemplifican su idea sugiriendo los arreglos mostrados en la Fig. \ref{fig:lusher}.
 
 \begin{figure}[htbp]
   \centering
@@ -63,28 +63,34 @@ El Algoritmo \ref{algorithms:minik-means} muestra el pseudocódigo de MiniBatch 
 \include{codes/minikmeans}\label{algorithms:minik-means}
 
 \subsection{Análisis de los perfiles identificados}
+
 Para caracterizar el rol de los usuarios, consideramos las propiedades topológicas de las órbitas dominantes de los grupos y el papel que desempeñan en el \textit{graphlet} al que pertenecen. También proponemos revisar las órbitas ausentes en los grupos, es decir, las órbitas ausentes en todos los usuarios de un grupo establecido.
 
 Algunas definiciones serán útiles para interpretar el rol que desempeñan las órbitas en un \textit{graphlet} específico. Es conveniente recordar que cada arista dirigida indica una relación entre dos nodos, donde el nodo inicial representa a un usuario que ha mencionado, respondido o retuiteado al usuario representado por el nodo final. 
 
 \begin{itemize}
-    \item Grado de entrada: Para un nodo $n$ de un \textit{graphlet}, el número de arcos dirigidos que comienzan en él se denomina grado de entrada (\textit{indegree}) de $n$. Se denota como $deg-(n)$
-    \item Grado de salida: El número de arcos dirigidos que terminan en el nodo de un \textit{graphlet} es su grado de salida (\textit{outdegree}). Se denota como $deg+(n)$.
-    \item Fuente: Un nodo $n$ tal que $deg-(n)=0$. 
-    \item Pozo: Un nodo $n$ tal que $deg+(n)=0$.
+    \item Grado de entrada: Para un nodo $n$ de un \textit{graphlet}, el número de aristas dirigidass que terminan en él se denomina grado de entrada (\textit{in-degree}) de $n$. Se denota como $indegree(n)$
+    \item Grado de salida: El número de aristas dirigidas que comienzan en el nodo de grafo es su grado de salida (\textit{out-degree}). Se denota como $outdegree(n)$.
+    \item Fuente: Un nodo se considera una fuente en un grafo si tiene un grado \textit{in-degree} de 0. Es decir, $n$ tal que $indegree(n)=0$. 
+    \item Pozo: Un nodo $n$ tal que $outdegree(n)=0$.
     \item Camino dirigido en un \textit{graphlet}: Una secuencia finita de aristas en una secuencia de distintos nodos de tal manera que todas las aristas tengan la misma dirección. Es fácil observar que cada camino maximal en un \textit{graphlet} comienza en una fuente y termina en un pozo. %Entender bien bien!
 \end{itemize}
 
 Dado que el grado de entrada y el grado de salida de un nodo son invariantes bajo una simetría, podemos extender las definiciones de fuente y de pozo de los nodos a las órbitas. 
 
+Considerando las relaciones establecidas anteriormente respecto a las posibles interacciones en \textit{Twitter} (Ver. \ref{interacciones_twitter} se pueden establecer roles en función de las órbitas.
+
 Podemos decir que una órbita fuente $\mathcal{O}$ es un oyente (\emph{listener}) si para cada nodo $n\in\mathcal{O}$, la longitud de cada camino maximal que contiene un nodo comenzando en $n$ es igual a 1. Las órbitas 0, 6, 7, 21, 23, y 29 son ejemplos de órbitas de oyentes, pero las órbitas 11 y 17 no lo son. (Ver Fig. \ref{fig:orbits})
 
-De manera similar podemos decir que una órbita pozo $\mathcal{O}$ es un hablante (\emph{speaker}) si para cada nodo  $n\in\mathcal{O}$, $n$ es un pozo con $deg-(n)>1$. Finalmente podemos decir que una órbita $\mathcal{O}$ es una audiencia (\emph{audience}) si para cada nodo $n\in\mathcal{O}$, $n$ es un oyente y cada otro nodo en una arista que comienza en $n$ es un hablante. Las órbitas 7, 21 y 29 son ejemplos de órbitas de audiencia, pero la órbita 23 no lo es. (Ver Fig. \ref{fig:orbits})
+De manera similar podemos decir que una órbita pozo $\mathcal{O}$ es un hablante (\emph{speaker}) si para cada otro nodo $n\in\mathcal{O}$, $n$ es un pozo con $indegree(n) > 1$. 
 
-Cada nodo $n$ participa en diferentes \textit{graphlets} dentro de un red; cada \textit{graphlet} nos da información sobre el vecindario local de 2, 3, o 4 nodos en los que $n$ participa. Adicionalmente, la información proporcionada por distintos \textit{graphlets} es diferente a aquella dada únicamente por el $deg-(n)$ o $deg+(n)$. Por ejemplo, es posible distinguir las órbitas 0 y 29 reconociendo que pueden frecuentemente participar en distintos roles dentro de la estructura general de la red (ver Fig. \ref{fig:orbits}) que nos permitirá distinguir entre dos de los perfiles que se describirán en la sección de resultados.
+Finalmente podemos decir que una órbita $\mathcal{O}$ es una audiencia (\emph{audience}) si para cada nodo $n\in\mathcal{O}$, $n$ es un oyente y cada otro nodo $m$ en una arista que comienza en $n$ es un hablante, es decir un pozo con $indegree(m) > 1$. Las órbitas 7, 21 y 29 son ejemplos de órbitas de audiencia, pero la órbita 23 no lo es. (Ver Fig. \ref{fig:orbits})
+
+Cada nodo $n$ participa en diferentes \textit{graphlets} dentro de un red; cada \textit{graphlet} nos da información sobre el vecindario local de 2, 3, o 4 nodos en los que $n$ participa. Adicionalmente, la información proporcionada por distintos \textit{graphlets} es diferente a aquella dada únicamente por el $indegree(n)$ o $outdegree(n)$. Por ejemplo, es posible distinguir las órbitas 0 y 29 reconociendo que pueden frecuentemente participar en distintos roles dentro de la estructura general de la red (ver Fig. \ref{fig:orbits}) que nos permitirá distinguir entre dos de los perfiles que se describirán en la sección de resultados.
 
 % Sección de estabilidad se va al capítulo de experimentos
 \subsection{Estabilidad de los perfiles identificados}
+\label{NMI}
 
 A la similitud entre distintas particiones generadas para un conjunto de datos, la llamaremos la estabilidad de la solución. Mientras más robusta es una estructura de organización en una colección, más parecidos son los agrupamientos resultantes de distintas corridas, con distintas inicializaciones.
 
@@ -122,7 +128,7 @@ Al representar cada red de acuerdo a la distribución de frecuencia de los tipos
 \subsection{Agrupamiento jerárquico}
 Una vez que se tiene la representación vectorial de cada red, utilizamos agrupamiento jerárquico para establecer la comparación entre redes. Este método permite analizar la estructura, en términos de distancia, de los grupos que surgen dentro del conjunto de datos considerando la representación basada en perfiles de usuario. 
 
-En el agrupamiento jerárquico, la estructura, o jerarquía de grupos, se determina de manera avara y comúnmente se presenta en un dendrograma. Los resultados dependen de una medida de distancia entre las instancias del conjunto y un criterio de distancia para subconjuntos de datos. 
+En el agrupamiento jerárquico, la estructura, o jerarquía de grupos, se determina de manera avara y comúnmente se presenta en un dendrograma (Fig. \ref{fig:hierarchy}). Los resultados dependen de una medida de distancia entre las instancias del conjunto y un criterio de distancia para subconjuntos de datos. 
 
 \begin{figure}[htbp]
   \centering

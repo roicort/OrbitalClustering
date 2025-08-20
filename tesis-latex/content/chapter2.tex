@@ -3,22 +3,13 @@
 \label{chapter:2}
 %\cleanchapterquote{A picture is worth a thousand words. An interface is worth a thousand pictures.}{Ben Shneiderman}{(Professor for Computer Science)}
 
-%\begin{lstlisting}[language=Java, caption={A simple Hellow World example in %Java.}\label{lst:javahelloworld}]
-%public class HelloWorld {
-%	public static void main ( String[] args ) {
-%		// Output Hello World!
-%		System.out.println( "Hello World!" );
-%	}
-%}
-%\end{lstlisting}
-
-En este capítulo se presenta el problema principal y algunos elementos necesarios para comprender tanto su complejidad del mismo como una posible solución. Comenzamos con una definición formal de un red  y de su representación matemática; posteriormente, se presenta el problema de agrupamiento y su relevancia dentro del aprendizaje automático. Finalmente, el capítulo se enfoca en analizar la tarea de agrupamiento en una colección de redes, describiendo brevemente enfoques y limitaciones para resolver el problema. 
+En este capítulo se presenta el problema principal y algunos elementos necesarios para comprender tanto su complejidad como una posible solución. Comenzamos con una definición formal de una red y de su representación matemática; posteriormente, se presenta el problema de agrupamiento y su relevancia dentro del aprendizaje automático. Finalmente, el capítulo se enfoca en analizar la tarea de agrupamiento en una colección de redes, describiendo brevemente enfoques y limitaciones para resolver el problema. 
 
 \section{Redes}
 
 Una red es un conjunto de nodos unidos por aristas que representan relaciones. Los nodos y aristas los podemos encontrar en distintas disciplinas con distintos nombres, por ejemplo en física se denominan sitios y vínculos y en sociología actores y vínculos. 
 
-La representación matemática de una red se denomina grafo y es estudiada en matemáticas discretas, específicamente en teoría de grafos. Un grafo está formalmente definido como un par de conjuntos $G = (V,E)$, donde $V$ es un conjunto no vacío de nodos (vértices) y $E$ es un conjunto de aristas (edges) \cite{saoub_graph_2021}.
+La representación matemática de una red se denomina grafo y es estudiada en matemáticas discretas, específicamente en teoría de grafos. Un grafo (\ref{fig:graph}) está formalmente definido como un par de conjuntos $G = (V,E)$, donde $V$ es un conjunto no vacío de nodos (vértices) y $E$ es un conjunto de aristas \cite{saoub_graph_2021}.
 
  \begin{figure}[htbp]
    \centering
@@ -27,20 +18,21 @@ La representación matemática de una red se denomina grafo y es estudiada en ma
     \label{fig:graph}
 \end{figure}
 
-Un grafo dirigido, o digrafo, es un grafo en el que las aristas tienen direcciones. En un sentido más formal, un grafo dirigido es una tripleta $G = (V,E,\phi)$ donde $\phi$ es una función de incidencia que asigna cada arista a un par ordenado de nodos, es decir, $ \phi :E \to \{(x,y)\mid (x,y)\in V^{2}\ \mbox{ y } x \neq y \}$
+Un grafo dirigido o digrafo, es un grafo en el que las aristas tienen direcciones (Ver \ref{fig:digraph}). En un sentido más formal, un grafo dirigido es una tripleta $G = (V,E,\phi)$ donde $\phi$ es una función de incidencia que asigna cada arista a un par ordenado de nodos, es decir, $ \phi :E \to \{(x,y)\mid (x,y)\in V^{2}\ \mbox{ y } x \neq y \}$
 
  \begin{figure}[htbp]
    \centering
    \includesvg[width=0.25\textwidth]{figures/digraph.svg}
-    \caption{Grafo Dirigido (\textit{DiGraph}). Podemos observar que la dirección de las aristas esta representada por una flecha que indica en donde se origina la arista (inicio de la flecha) .}
+    \caption{Grafo Dirigido (\textit{DiGraph}). Podemos observar que la dirección de las aristas esta representada por una flecha que indica en donde se origina la arista (inicio de la flecha).}
     \label{fig:digraph}
 \end{figure}
 
-Un subgrafo $H$ de un grafo $G$ es un grafo formado a partir de un subconjunto de nodos y un subconjunto de aristas de $G$. El subconjunto de nodos debe incluir todos los extremos del subconjunto de aristas, pero también puede incluir otros nodos. Un subgrafo inducido $H$ de un grafo $G$ es aquel que incluye todas las aristas del grafo $G$ cuyos puntos extremos pertenecen al subconjunto de nodos que define al subgrafo $H$.
+Un subgrafo $H = (V', E')$ de un grafo $G = (V, E)$ es un grafo formado a partir de un subconjunto de nodos y un subconjunto de aristas de $G$ en dónde el subconjunto de aristas $V'$ conectan solo los nodos del subconjunto $E'$ y mantienen las mismas relaciones de adyacencia que tenían en el grafo original
+Es decir, $V'$ es un subconjunto de $V$ ($V' \subseteq V$) y $E'$ es un subconjunto de $E$ que contiene solo aristas cuyos dos extremos están en $V'$.
 
-Un isomorfismo de grafos es una biyección de los nodos de un grafo sobre otro, de modo que se preserva la adyacencia de los nodos. Formalmente, el isomorfismo entre dos grafos $G$ y $H$ es una función biyectiva  $f:V(G) \rightarrow V(H)$. Esta definición se extiende a las gráficas dirigidas si la función preserva el orden entre cada par de nodos asociados con una arista. 
+Un subgrafo inducido $H = (V', E')$ de un grafo $G = (V, E)$ es aquel que en donde $E'$ es el conjunto de todas las aristas de $G$ cuyos nodos incidentes están todos en $V'$. Esto significa que en un subgrafo inducido, los nodos seleccionados forman un subconjunto completamente conectado del grafo original. Formalmente, $V'$ es un subconjunto de $V$ ($V' \subseteq V$) y $E'$ consiste en todas las aristas en $E$ que tienen ambos extremos en $V'$. 
 
-Una simetría es un isomorfismo de una gráfica sobre sí misma.
+Un isomorfismo de grafos es una biyección de los nodos de un grafo sobre otro, de modo que se preserva la adyacencia de los nodos. Formalmente, el isomorfismo entre dos grafos $G$ y $H$ es una función biyectiva  $f:V(G) \rightarrow V(H)$. Esta definición se extiende a las gráficas dirigidas si la función preserva el orden entre cada par de nodos asociados con una arista. Una simetría es un isomorfismo de una gráfica sobre sí misma.
 
 Determinar si dos grafos con el mismo número de vértices $n$ y aristas $m$ son isomorfos o no, se conoce como el problema del isomorfismo de grafos. Este es un problema NP y se cree que es NP-Completo, aunque no está demostrado \cite{kobler_graph_1993}.
 
@@ -53,18 +45,15 @@ Determinar si dos grafos con el mismo número de vértices $n$ y aristas $m$ son
     \label{fig:isomorphism}
 \end{figure}
 
- 
-%{Al uses the traditional brute-force method for determining graph isomorphism; enumerate and test all permutations of the vertices of Graph 2 until an isomorphism mapping is found. This determination is made by verifying that every edge in Graph 1 is present in Graph 2 using the currently enumerated permutation and vice versa. If all permutations are exhausted and an isomorphism has not been found, then the two graphs are not isomorphic. The time complexity of this 2 algorithm is O(N N!) where N is the number of vertices in graphs 1 and 2.}
-
 
 \section{Aprendizaje automático}
 \label{sec:ML}
 
 El aprendizaje automático o aprendizaje de máquina, del inglés \textit{Machine Learning} (ML), es una rama de la Inteligencia Artificial (IA) que estudia algoritmos y técnicas que permiten automatizar soluciones a problemas complejos. Esto se logra a partir del aprendizaje sobre conjuntos de datos. 
 
-Como subconjutnto de IA, un campo de estudio amplio y diverso que estudia distintas técnicas para crear algoritmos inteligentes, el aprendizaje automático se enfoca principalmente en imitar el aprendizaje humano y gradualmente mejorar la precisión sobre una tarea \cite{ibm_what_nodate}. En problemas complejos, a pesar de tener requerimientos claros y específicos, puede resultar complicado crear y programar conjuntos de reglas explícitas que representen una solución. Un ejemplo claro podría ser la tarea de detectar objetos en una imagen \cite{rebala_introduction_2019}.
+Como subconjunto de la Inteligencia Artificial, un campo de estudio amplio y diverso que estudia distintas técnicas para crear algoritmos inteligentes, el aprendizaje automático se enfoca principalmente en imitar el aprendizaje humano y gradualmente mejorar la precisión sobre una tarea \cite{ibm_what_nodate}. En problemas complejos, a pesar de tener requerimientos claros y específicos, puede resultar complicado crear y programar conjuntos de reglas explícitas que representen una solución. Un ejemplo claro podría ser la tarea de detectar objetos en una imagen \cite{rebala_introduction_2019}.
 
-Los algoritmos de aprendizaje automático son capaces de resolver problemas de manera {\it implícita}, aprendiendo estructuras y reglas a partir de un conjunto de datos en vez de tener una estructura y diseño explícito.  La naturaleza de estos algoritmos hace que dependan directamente de la calidad y cantidad de ejemplos en el conjunto de datos. Dependiendo de la naturaleza de la tarea planteada en el conjunto de datos, encontraremos distintas categorías de algoritmos dentro del aprendizaje automático \cite{rebala_introduction_2019}. Principalmente, se establece una distinción entre los conjuntos de datos etiquetas y no etiquetados.
+Los algoritmos de aprendizaje automático son capaces de resolver problemas de manera \texit{implícita}, aprendiendo estructuras y reglas a partir de un conjunto de datos en vez de tener una estructura y diseño explícito.  La naturaleza de estos algoritmos hace que dependan directamente de la calidad y cantidad de ejemplos en el conjunto de datos. Dependiendo de la naturaleza de la tarea planteada en el conjunto de datos, encontraremos distintas categorías de algoritmos dentro del aprendizaje automático \cite{rebala_introduction_2019}. Principalmente, se establece una distinción entre los conjuntos de datos etiquetas y no etiquetados.
 
 Un conjunto de datos etiquetado es aquel cuyos ejemplos tienen la respuesta a la pregunta que se hace. Podemos pensar al conjunto de datos etiquetado como una guía de estudio, a partir de la cual el estudiante (en este caso la máquina) puede aprender de ejemplos. En el caso de la tarea de clasificación, el conjunto de datos contiene información sobre la clase representada por cada objeto; por ejemplo, una imagen de un perro contiene la etiqueta perro. 
 
@@ -168,7 +157,7 @@ Entre las aproximaciones populares para comparar dos grafos podemos encontrar el
 
 %Idealmente el Isomorfismo de Grafo sería la aproximación más adecuada, no obstante como vimos en \ref{subsection:isomorphism} se trata de un problema NP y por lo tanto existen limitaciones mas que considerables en la práctica.
 
-\paragraph{Medidas estructurales.} Es posible establecer una comparación entre dos grafos basada en propiedades de los mismos. Por ejemplo, el trabajo \textit{"Classifying Twitter Topic-Networks Using Social Network Analysis"} \cite{himelboim_classifying_2017}, relacionado muy de cerca a nuestra propuesta en cuanto a objetivo, utiliza las medidas de centralidad, centralización, densidad, modularidad y fracción de \textit{clusters} e \textit{Isolates} para establecer categorías de redes dentro de una colección, agrupando así conforme a características estructurales. Desafortunadamente este enfoque puede ser limitado en cuanto a la distinción que establece entre redes. Dependiendo de los indicadores considerados y del contexto del problema, el enfoque podría no capturar con suficiente detalle la estructura de las redes que se están comparando. 
+\paragraph{Medidas estructurales.} Es posible establecer una comparación entre dos grafos basada en propiedades de los mismos. Por ejemplo, el trabajo \enquote{\textit{Classifying Twitter Topic-Networks Using Social Network Analysis}} \cite{himelboim_classifying_2017}, relacionado muy de cerca a nuestra propuesta en cuanto a objetivo, utiliza las medidas de centralidad, centralización, densidad, modularidad y fracción de \textit{clusters} e \textit{Isolates} para establecer categorías de redes dentro de una colección, agrupando así conforme a características estructurales. Desafortunadamente este enfoque puede ser limitado en cuanto a la distinción que establece entre redes. Dependiendo de los indicadores considerados y del contexto del problema, el enfoque podría no capturar con suficiente detalle la estructura de las redes que se están comparando. 
 
 \paragraph{Distancia de Edición (\textit{Graph Edit Distance}, GED).} Esta es una de las alternativas más conocidas para comparar dos grafos. La GED mide el número de cambios (inserciones y remociones de nodos y/o aristas) necesarios para llegar a la estructura del grafo $B$ partiendo desde el grafo $A$. 
 
